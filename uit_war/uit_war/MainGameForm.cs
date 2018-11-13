@@ -18,7 +18,7 @@ namespace uit_war
         List<Trop> listTrops = new List<Trop>();
         List<Trop> listRivalTrops = new List<Trop>();
         #endregion
-
+aaaa
         public MainGameForm()
         {
             InitializeComponent();

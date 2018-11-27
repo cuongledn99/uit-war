@@ -86,7 +86,11 @@ namespace uit_war
 
         private void exit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            DialogResult dlr =MessageBox.Show("DO YOU WANT TO EXIT !!!", "Warning", MessageBoxButtons.YesNo);
+            if (dlr == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
         }
 
         void ChessBoard_PlayerMarked(object sender, Point point)

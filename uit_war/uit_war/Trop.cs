@@ -253,9 +253,9 @@ namespace uit_war
             //set suitable sprite
             CurrentHPLocation = new Point(CurrentLocation.X, CurrentLocation.Y - 3);
             if (CurrentTeam)//team left
-                Sprite = Const.sprite_Mario_Attack_right;
+                Sprite = Const.sprite_megaman_attack_right;
             else if (CurrentTeam == false)//team right
-                Sprite = Const.sprite_mario_attack_left;
+                Sprite = Const.sprite_megaman_attack_left;
             //decrease victim's HP
             Const.listTrops[CurrentVictim].CurrentHP -= Damage;
         }

@@ -6,7 +6,7 @@ namespace uit_war
 {
     public class RenderTool
     {
-        
+
 
         // Vẽ một phần của ảnh sprite
         /// <summary>
@@ -25,40 +25,29 @@ namespace uit_war
             //render money bar
             g.DrawImage(Const.spriteAvailableMoney, 78, 1);
             ////render fire border
-            g.DrawImage(Const.sprite_touch,365,0,
+            g.DrawImage(Const.sprite_touch, 365, 0,
             new Rectangle(Const.curFrameColumn * Const.imageWidth / Const.imageColumns,
         Const.curFrameRow * Const.imageHeight / Const.imageRows, Const.imageWidth / Const.imageColumns, Const.imageHeight / Const.imageRows), GraphicsUnit.Pixel);
-            g.DrawImage(Const.sprite_touch, 365, Const.sprite_touch.Height/4,
+            g.DrawImage(Const.sprite_touch, 365, Const.sprite_touch.Height / 4,
             new Rectangle(Const.curFrameColumn * Const.imageWidth / Const.imageColumns,
         Const.curFrameRow * Const.imageHeight / Const.imageRows, Const.imageWidth / Const.imageColumns, Const.imageHeight / Const.imageRows), GraphicsUnit.Pixel);
             g.DrawImage(Const.sprite_touch, 365, 180,
             new Rectangle(Const.curFrameColumn * Const.imageWidth / Const.imageColumns,
         Const.curFrameRow * Const.imageHeight / Const.imageRows, Const.imageWidth / Const.imageColumns, Const.imageHeight / Const.imageRows), GraphicsUnit.Pixel);
-            g.DrawImage(Const.sprite_touch, 365, 170+Const.sprite_touch.Height / 4,
+            g.DrawImage(Const.sprite_touch, 365, 170 + Const.sprite_touch.Height / 4,
             new Rectangle(Const.curFrameColumn * Const.imageWidth / Const.imageColumns,
         Const.curFrameRow * Const.imageHeight / Const.imageRows, Const.imageWidth / Const.imageColumns, Const.imageHeight / Const.imageRows), GraphicsUnit.Pixel);
             g.DrawImage(Const.sprite_touch, 365, 357,
             new Rectangle(Const.curFrameColumn * Const.imageWidth / Const.imageColumns,
         Const.curFrameRow * Const.imageHeight / Const.imageRows, Const.imageWidth / Const.imageColumns, Const.imageHeight / Const.imageRows), GraphicsUnit.Pixel);
-            g.DrawImage(Const.sprite_touch, 365, 340+Const.sprite_touch.Height / 4,
+            g.DrawImage(Const.sprite_touch, 365, 340 + Const.sprite_touch.Height / 4,
             new Rectangle(Const.curFrameColumn * Const.imageWidth / Const.imageColumns,
         Const.curFrameRow * Const.imageHeight / Const.imageRows, Const.imageWidth / Const.imageColumns, Const.imageHeight / Const.imageRows), GraphicsUnit.Pixel);
-            //Const.curFrameColumn_fire = Const.index_fire % Const.imageColumns_fire;
-            //Const.curFrameRow_fire = Const.index / Const.imageRows_fire;
-            //g.DrawImage(Const.sprite_fire, 0, 0,
-            //    new Rectangle(Const.curFrameColumn_fire * Const.imageWidth_fire / Const.imageColumns_fire,
-            //    Const.curFrameRow_fire * Const.imageHeight_fire / Const.imageRows_fire, Const.imageWidth_fire / Const.imageColumns_fire, Const.imageHeight_fire / Const.imageRows_fire), GraphicsUnit.Pixel);
-            //Const.index_fire++;
-            //if (Const.index_fire > Const.numberOfFrames_fire)
-            //    Const.index_fire = 0;
-            //else
-            //    Const.index_fire++;
-            // Xác dịnh số dòng, cột của một frame trên ảnh sprite
             Const.curFrameColumn = Const.index % Const.imageColumns;
             Const.curFrameRow = Const.index / Const.imageRows;
             //render list spell
-            for(int i=0;i<Const.listSpells.Count;i++)
-                g.DrawImage(Const.listSpells[i].Sprite,Const.listSpells[i].CurrentLocation.X,Const.listSpells[i].CurrentLocation.Y,
+            for (int i = 0; i < Const.listSpells.Count; i++)
+                g.DrawImage(Const.listSpells[i].Sprite, Const.listSpells[i].CurrentLocation.X, Const.listSpells[i].CurrentLocation.Y,
                     new Rectangle(Const.curFrameColumn * Const.imageWidth / Const.imageColumns,
                 Const.curFrameRow * Const.imageHeight / Const.imageRows, Const.imageWidth / Const.imageColumns, Const.imageHeight / Const.imageRows), GraphicsUnit.Pixel);
             // render trops and its HP on back buffer
@@ -83,5 +72,5 @@ namespace uit_war
             Const.graphics.DrawImageUnscaled(Const.backBuffer, 0, 0);
         }
     }
-    
+
 }

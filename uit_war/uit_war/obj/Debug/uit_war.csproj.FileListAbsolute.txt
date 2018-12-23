@@ -31,3 +31,14 @@ D:\kemulator\Windroy\uit\source code .net\uit_war\uit_war\obj\Debug\uit_war.cspr
 D:\kemulator\Windroy\uit\source code .net\uit_war\uit_war\obj\Debug\uit_war.csproj.CoreCompileInputs.cache
 D:\kemulator\Windroy\uit\source code .net\uit_war\uit_war\obj\Debug\uit_war.exe
 D:\kemulator\Windroy\uit\source code .net\uit_war\uit_war\obj\Debug\uit_war.pdb
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\uit_war.exe.config
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\uit_war.exe
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\uit_war.pdb
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.csprojAssemblyReference.cache
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.MainGameForm.resources
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.LoginForm.resources
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.Properties.Resources.resources
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.csproj.GenerateResource.cache
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.csproj.CoreCompileInputs.cache
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.exe
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.pdb

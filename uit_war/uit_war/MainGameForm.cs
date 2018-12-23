@@ -54,8 +54,8 @@ namespace uit_war
             Const.sprite_hulk_attack_right = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\hulk_attack_right.png"));
             Const.sprite_megaman_left = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\megaman_left.png"));
             Const.sprite_megaman_right = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\megaman_right.png"));
-            //Const.sprite_megaman_attack_left = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\megaman_attack_left.png"));
-            //Const.sprite_megaman_attack_right = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\megaman_attack_right.png"));
+            Const.sprite_megaman_attack_left = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\megaman_attack_left.png"));
+            Const.sprite_megaman_attack_right = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\megaman_attack_right.png"));
             Const.spriteHP0 = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\0.png"));
             Const.spriteHP10 = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\10.png"));
             Const.spriteHP20 = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\20.png"));

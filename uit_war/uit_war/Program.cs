@@ -25,8 +25,8 @@ namespace uit_war
             //socket
             socket = new SocketManager();
             //
-            login.ShowDialog();
-            Application.Run(main);
+            //login.ShowDialog();
+            Application.Run(login);
         }
     }
 }

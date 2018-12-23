@@ -18,12 +18,11 @@ namespace uit_war
     public class SocketManager
     {
         #region Client
-        Socket client;
-        public bool ConnectServer()
+        public static Socket client;
+        public static bool ConnectServer(string IP,int PORT)
         {
             IPEndPoint iep = new IPEndPoint(IPAddress.Parse(IP), PORT);
             client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
             try
             {
                 client.Connect(iep);
@@ -34,11 +33,20 @@ namespace uit_war
                 return false;
             }
         }
+        public static  bool CloseClientConnection()
+        {
+            try
+            {
+                client.Close();
+                return true;
+            }
+            catch { return false; }
+        }
         #endregion
 
         #region server
 
-        Socket server;
+        static Socket server;
         public void CreateServer()
         {
             IPEndPoint iep = new IPEndPoint(IPAddress.Parse(IP), PORT);
@@ -53,6 +61,15 @@ namespace uit_war
             });
             acceptClient.IsBackground = true;
             acceptClient.Start();
+        }
+        public static  bool CloseServer()
+        {
+            try
+            {
+                server.Close();
+                return true;
+            }
+            catch { return false; }
         }
         #endregion
 
@@ -160,7 +177,16 @@ namespace uit_war
             return false;
         }
 
-        
+        public static bool CloseConnection()
+        {
+            try
+            {
+                SocketManager.CloseClientConnection();
+                SocketManager.CloseServer();
+                return true;
+            }
+            catch { return false; }
+        }
 
        
         #endregion

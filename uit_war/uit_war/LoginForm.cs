@@ -24,7 +24,7 @@ namespace uit_war
 
             
         }
-
+        // tạo phòng
         private void connect_Click(object sender, EventArgs e)
         {
             #region mycode
@@ -83,25 +83,107 @@ namespace uit_war
             //if server is not exist
             //create server
             //waiting for connect from client
-            if (!Program.socket.ConnectServer())
+            //if (!Program.socket.ConnectServer())
+            // {
+            try
             {
+               // SocketManager.CloseConnection();
                 Program.socket.isServer = true;
                 Program.socket.CreateServer();
                 ///
-                Program.login.Close();
+                Program.main = new MainGameForm();
                 Program.main.Text = "server";
+                Program.login.Hide();
+                Program.main.Show();
+
+                Const.currentTeam = true;//left team 
             }
-            //client
-            else
+            catch
             {
-                Program.socket.isServer = false;
+                Program.socket = null;
+                Program.socket = new SocketManager();
+                Program.socket.isServer = true;
+                Program.socket.CreateServer();
                 ///
-                Program.login.Close();
-                Program.main.Text = "client";
+                Program.main = new MainGameForm();
+                Program.main.Text = "server";
+                Program.login.Hide();
+                Program.main.Show();
+
+                Const.currentTeam = true;//left team
             }
+            //}
+            ////client
+            //else
+            //{
+            //    Program.socket.isServer = false;
+            //    ///
+            //    Program.login.Close();
+            //    Program.main.Text = "client";
+            //    Const.currentTeam = false;//right team
+            //}
             
         }
 
-        
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
+            txtboxMyIP.Text = SocketManager.GetLocalIPv4_v2();
+        }
+
+        private void btEnterRoom_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //SocketManager.CloseConnection();
+                SocketManager.ConnectServer(txtboxRivalIP.Text, 9999);
+                Program.socket.isServer = false;
+                //Program.login.Close();
+                Program.main = new MainGameForm();
+                Program.main.Text = "client";
+                Program.login.Hide();
+                Program.main.Show();
+
+                Const.currentTeam = false;//right team
+            }
+            catch
+            {
+                SocketManager.ConnectServer(txtboxRivalIP.Text, 9999);
+                Program.socket.isServer = false;
+                //Program.login.Close();
+                Program.main = new MainGameForm();
+                Program.main.Text = "client";
+                Program.login.Hide();
+                Program.main.Show();
+
+                Const.currentTeam = false;//right team
+            }
+        }
+
+        private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void btCopy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(txtboxMyIP.Text);
+        }
+
+
+
+
+        private void InitProperties()
+        {
+            Const.listSpells = new List<Spell>();
+            Const.listSpells.Clear();
+            Const.listTrops = new List<Trop>();
+            Const.listTrops.Clear();
+            Const.spriteAvailableMoney = Const.spriteMoney0;
+        }
+        private void LoginForm_Activated(object sender, EventArgs e)
+        {
+            InitProperties();
+            SocketManager.CloseConnection();
+        }
     }
 }

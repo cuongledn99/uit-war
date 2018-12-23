@@ -40,11 +40,11 @@ namespace uit_war
         
         public bool Send()
         {
-            int[] location = { this.archer_left.Location.X, this.archer_left.Location.Y };
-            byte[] dataToSend = Both.SerializeData(location);
+            //int[] location = { this.archer_left.Location.X, this.archer_left.Location.Y };
+            //byte[] dataToSend = Both.SerializeData(location);
             try
             {
-                acceptClient.Send(dataToSend);
+                //acceptClient.Send(dataToSend);
                 return true;
             }
             catch (Exception)

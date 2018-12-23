@@ -59,7 +59,6 @@ namespace uit_war
                 {
                     int[] location = (int[])Both.DeserializeData(dataReceived);
                     //set server's archer location
-                    this.archer_left.Location = new Point(location[0], location[1]);
                     return true;
                 }
                 //else
@@ -89,4 +88,3 @@ namespace uit_war
         }
     }
 }
-///tetst

@@ -83,16 +83,6 @@ namespace uit_war.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap healing_spell_faded {
-            get {
-                object obj = ResourceManager.GetObject("healing_spell_faded", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap hulk {
             get {
                 object obj = ResourceManager.GetObject("hulk", resourceCulture);

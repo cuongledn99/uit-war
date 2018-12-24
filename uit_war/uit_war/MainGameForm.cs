@@ -223,7 +223,6 @@ namespace uit_war
         }
 
        
-        //get
         void ListenUntilReceivedData()
         {
             Thread listenThread = new Thread(() =>
@@ -329,6 +328,8 @@ namespace uit_war
                         timer1.Stop();
                         timer_increase_money.Stop();
                         MessageBox.Show("You lose");
+                        this.Close();
+                        Program.login.Show();
                     }));
                     break;
                 case (int)SocketCommand.QUIT:
@@ -363,8 +364,6 @@ namespace uit_war
                     //process win/lose
                     //trop outside screen
                     //and trop is my team
-                    //if (Const.listTrops[i].CurrentLocation.X > 831)
-                    //{
                     if (Const.listTrops[i].CurrentLocation.X < 0 || Const.listTrops[i].CurrentLocation.X > this.ClientSize.Width
                         && Const.listTrops[i].CurrentTeam == Const.currentTeam)
                     {
@@ -373,9 +372,11 @@ namespace uit_war
 
                         //notify rival that he was lose
                         Program.socket.Send(new SocketData((int)SocketCommand.END_GAME, currentItem, Point.Empty));
+                        //update won_matchs in database
                         MessageBox.Show("You win");
+                        this.Close();
+                        Program.login.Show();
                     }
-                    //}
                     //remove trops died
                     if (Const.listTrops[i].CurrentHP <= 0)
                     {

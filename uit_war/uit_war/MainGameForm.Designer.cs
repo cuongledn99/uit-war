@@ -61,7 +61,7 @@ namespace uit_war
             // 
             // btHealingSpell
             // 
-            this.btHealingSpell.BackgroundImage = global::uit_war.Properties.Resources.healing_spell_faded;
+            //this.btHealingSpell.BackgroundImage = BackgroundImage.fro
             this.btHealingSpell.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btHealingSpell.Location = new System.Drawing.Point(548, 0);
             this.btHealingSpell.Name = "btHealingSpell";

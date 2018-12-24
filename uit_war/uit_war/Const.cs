@@ -14,6 +14,7 @@ namespace uit_war
         public static int PORT = 9999;
         public static Client client=new Client();
         public static Server server=new Server();
+        public static string username;
         //test render
         public static Graphics graphics;
         public static Bitmap backBuffer;

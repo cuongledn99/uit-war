@@ -42,3 +42,8 @@ D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.csproj.CoreCompileInputs.cache
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.exe
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.pdb
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\MySql.Data.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\Google.Protobuf.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\MySql.Data.xml
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.csproj.CopyComplete
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.RankForm.resources

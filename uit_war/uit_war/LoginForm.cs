@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,14 +16,28 @@ namespace uit_war
     public partial class LoginForm : Form
     {
         public static bool isServer = false;
-        
+
         public LoginForm()
         {
             InitializeComponent();
             //no care
             Control.CheckForIllegalCrossThreadCalls = false;
 
-            
+
+        }
+        bool IsValidUsername(string username)
+        {
+            //Chuan bi cau lenh query viet bang SQL
+            String sqlQuery = "select * from users where username='" + txtboxUsername.Text + "'";
+            SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
+            SqlDataReader reader = connection.Query(sqlQuery);
+            if (reader.HasRows)
+            {
+                connection.Close();
+                return false;
+            }
+            connection.Close();
+            return true;
         }
         // tạo phòng
         private void connect_Click(object sender, EventArgs e)
@@ -79,50 +94,57 @@ namespace uit_war
 
             ////////////////
             #endregion
-
-            //if server is not exist
-            //create server
-            //waiting for connect from client
-            //if (!Program.socket.ConnectServer())
-            // {
-            try
+            if (IsValidUsername(txtboxUsername.Text))
             {
-               // SocketManager.CloseConnection();
-                Program.socket.isServer = true;
-                Program.socket.CreateServer();
-                ///
-                Program.main = new MainGameForm();
-                Program.main.Text = "server";
-                Program.login.Hide();
-                Program.main.Show();
+                Const.username = txtboxUsername.Text;
 
-                Const.currentTeam = true;//left team 
+                //if server is not exist
+                //create server
+                //waiting for connect from client
+                //if (!Program.socket.ConnectServer())
+                // {
+                try
+                {
+                    // SocketManager.CloseConnection();
+                    Program.socket.isServer = true;
+                    Program.socket.CreateServer();
+                    ///
+                    Program.main = new MainGameForm();
+                    Program.main.Text = "server";
+                    Program.login.Hide();
+                    Program.main.Show();
+
+                    Const.currentTeam = true;//left team 
+                }
+                catch
+                {
+                    Program.socket = null;
+                    Program.socket = new SocketManager();
+                    Program.socket.isServer = true;
+                    Program.socket.CreateServer();
+                    ///
+                    Program.main = new MainGameForm();
+                    Program.main.Text = "server";
+                    Program.login.Hide();
+                    Program.main.Show();
+
+                    Const.currentTeam = true;//left team
+                }
+                //}
+                ////client
+                //else
+                //{
+                //    Program.socket.isServer = false;
+                //    ///
+                //    Program.login.Close();
+                //    Program.main.Text = "client";
+                //    Const.currentTeam = false;//right team
+                //}
             }
-            catch
+            else
             {
-                Program.socket = null;
-                Program.socket = new SocketManager();
-                Program.socket.isServer = true;
-                Program.socket.CreateServer();
-                ///
-                Program.main = new MainGameForm();
-                Program.main.Text = "server";
-                Program.login.Hide();
-                Program.main.Show();
-
-                Const.currentTeam = true;//left team
+                MessageBox.Show("username đã tồn tại !!!");
             }
-            //}
-            ////client
-            //else
-            //{
-            //    Program.socket.isServer = false;
-            //    ///
-            //    Program.login.Close();
-            //    Program.main.Text = "client";
-            //    Const.currentTeam = false;//right team
-            //}
-            
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
@@ -132,31 +154,36 @@ namespace uit_war
 
         private void btEnterRoom_Click(object sender, EventArgs e)
         {
-            try
+            if (IsValidUsername(txtboxUsername.Text))
             {
-                //SocketManager.CloseConnection();
-                SocketManager.ConnectServer(txtboxRivalIP.Text, 9999);
-                Program.socket.isServer = false;
-                //Program.login.Close();
-                Program.main = new MainGameForm();
-                Program.main.Text = "client";
-                Program.login.Hide();
-                Program.main.Show();
+                try
+                {
+                    //SocketManager.CloseConnection();
+                    SocketManager.ConnectServer(txtboxRivalIP.Text, 9999);
+                    Program.socket.isServer = false;
+                    //Program.login.Close();
+                    Program.main = new MainGameForm();
+                    Program.main.Text = "client";
+                    Program.login.Hide();
+                    Program.main.Show();
 
-                Const.currentTeam = false;//right team
-            }
-            catch
-            {
-                SocketManager.ConnectServer(txtboxRivalIP.Text, 9999);
-                Program.socket.isServer = false;
-                //Program.login.Close();
-                Program.main = new MainGameForm();
-                Program.main.Text = "client";
-                Program.login.Hide();
-                Program.main.Show();
+                    Const.currentTeam = false;//right team
+                }
+                catch
+                {
+                    SocketManager.ConnectServer(txtboxRivalIP.Text, 9999);
+                    Program.socket.isServer = false;
+                    //Program.login.Close();
+                    Program.main = new MainGameForm();
+                    Program.main.Text = "client";
+                    Program.login.Hide();
+                    Program.main.Show();
 
-                Const.currentTeam = false;//right team
+                    Const.currentTeam = false;//right team
+                }
             }
+            else
+                MessageBox.Show("username đã tồn tại !!!");
         }
 
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -170,8 +197,16 @@ namespace uit_war
         }
 
 
-
-
+        private void EnableAllButton()
+        {
+            btEnterRoom.Enabled = true;
+            btCreateRoom.Enabled = true;
+        }
+        private void DisableAllButton()
+        {
+            btCreateRoom.Enabled = false;
+            btEnterRoom.Enabled = false;
+        }
         private void InitProperties()
         {
             Const.listSpells = new List<Spell>();
@@ -182,8 +217,33 @@ namespace uit_war
         }
         private void LoginForm_Activated(object sender, EventArgs e)
         {
+            txtboxMyIP.Enabled = false;
+            DisableAllButton();
             InitProperties();
             SocketManager.CloseConnection();
         }
+
+        private void btRank_Click(object sender, EventArgs e)
+        {
+            RankForm rankForm = new RankForm();
+            rankForm.ShowDialog();
+        }
+
+        private void lbMyIP_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtboxUsername_TextChanged(object sender, EventArgs e)
+        {
+            if (txtboxUsername.Text.ToString() == "")
+                DisableAllButton();
+            else
+                EnableAllButton();
+        }
     }
+
+
+
+
 }

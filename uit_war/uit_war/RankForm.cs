@@ -32,10 +32,10 @@ namespace uit_war
         {
             InitializeComponent();
         }
-
+        
         private void RankForm_Load(object sender, EventArgs e)
         {
-            LoadDataToTable("192.168.137.1");
+            LoadDataToTable(Const.serverIP);
         }
         private void LoadDataToTable(string databaseIP)
         {

@@ -15,11 +15,15 @@ namespace uit_war
         public static Client client=new Client();
         public static Server server=new Server();
         public static string username;
+        public static string serverIP;
         //test render
         public static Graphics graphics;
         public static Bitmap backBuffer;
         // Bitmap dùng cho ảnh sprite
-        // public static Bitmap sprite_fire;
+        public static Bitmap healingSpell_tip;
+        public static Bitmap knight_tip;
+        public static Bitmap megaman_tip;
+        public static Bitmap hulk_tip;
         public static Bitmap sprite_touch;
         public static Bitmap sprite_Mario_Right, sprite_Mario_Left;
         public static Bitmap sprite_Mario_Attack_right, sprite_mario_attack_left;

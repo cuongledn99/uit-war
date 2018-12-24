@@ -41,6 +41,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtboxDatabaseIP = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.txtboxID = new System.Windows.Forms.TextBox();
+            this.txtboxPassword = new System.Windows.Forms.TextBox();
+            this.btDangki = new System.Windows.Forms.Button();
+            this.btDangNhap = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtboxRivalIP
@@ -149,6 +155,58 @@
             this.label2.TabIndex = 11;
             this.label2.Text = "IP server";
             // 
+            // txtboxID
+            // 
+            this.txtboxID.Location = new System.Drawing.Point(113, 207);
+            this.txtboxID.Name = "txtboxID";
+            this.txtboxID.Size = new System.Drawing.Size(100, 20);
+            this.txtboxID.TabIndex = 12;
+            // 
+            // txtboxPassword
+            // 
+            this.txtboxPassword.Location = new System.Drawing.Point(113, 262);
+            this.txtboxPassword.Name = "txtboxPassword";
+            this.txtboxPassword.Size = new System.Drawing.Size(100, 20);
+            this.txtboxPassword.TabIndex = 13;
+            // 
+            // btDangki
+            // 
+            this.btDangki.Location = new System.Drawing.Point(42, 324);
+            this.btDangki.Name = "btDangki";
+            this.btDangki.Size = new System.Drawing.Size(75, 23);
+            this.btDangki.TabIndex = 14;
+            this.btDangki.Text = "Đăng kí";
+            this.btDangki.UseVisualStyleBackColor = true;
+            this.btDangki.Click += new System.EventHandler(this.btDangki_Click);
+            // 
+            // btDangNhap
+            // 
+            this.btDangNhap.Location = new System.Drawing.Point(178, 324);
+            this.btDangNhap.Name = "btDangNhap";
+            this.btDangNhap.Size = new System.Drawing.Size(75, 23);
+            this.btDangNhap.TabIndex = 15;
+            this.btDangNhap.Text = "Đăng nhập";
+            this.btDangNhap.UseVisualStyleBackColor = true;
+            this.btDangNhap.Click += new System.EventHandler(this.btDangNhap_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(39, 214);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(58, 13);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "User name";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(39, 262);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(53, 13);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "Password";
+            // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -156,6 +214,12 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.btDangNhap);
+            this.Controls.Add(this.btDangki);
+            this.Controls.Add(this.txtboxPassword);
+            this.Controls.Add(this.txtboxID);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtboxDatabaseIP);
             this.Controls.Add(this.label1);
@@ -194,5 +258,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtboxDatabaseIP;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtboxID;
+        private System.Windows.Forms.TextBox txtboxPassword;
+        private System.Windows.Forms.Button btDangki;
+        private System.Windows.Forms.Button btDangNhap;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }

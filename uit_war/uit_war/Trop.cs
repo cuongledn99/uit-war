@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,6 +17,7 @@ namespace uit_war
             CurrentStatus = false;
             BeingAttackedBy = new List<int>();
         }
+        public SoundPlayer Mcd = new SoundPlayer("Resources\\hit.wav");
         private bool currentStatus;// false: running true: attacking
         protected int speed;
         private int damage;
@@ -146,6 +149,7 @@ namespace uit_war
         public override void Attack()
         {
             UpdateHP();
+            
             CurrentHPLocation = new Point(CurrentLocation.X, CurrentLocation.Y - 3);
             //set suitable sprite
             if (CurrentTeam)//team left
@@ -181,7 +185,7 @@ namespace uit_war
         }
         public override void Move()
         {
-
+           
             UpdateHP();
             CurrentHPLocation = new Point(CurrentLocation.X, CurrentLocation.Y - 3);
             if (CurrentTeam)//left team
@@ -197,7 +201,7 @@ namespace uit_war
         }
         public override void Attack()
         {
-            UpdateHP();
+           
             //set suitable sprite
             CurrentHPLocation = new Point(CurrentLocation.X, CurrentLocation.Y - 3);
             if (CurrentTeam)//team left
@@ -249,6 +253,7 @@ namespace uit_war
         }
         public override void Attack()
         {
+            
             UpdateHP();
             //set suitable sprite
             CurrentHPLocation = new Point(CurrentLocation.X, CurrentLocation.Y - 3);

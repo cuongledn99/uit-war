@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace uit_war
     public partial class LoginForm : Form
     {
         public static bool isServer = false;
-
+        public SoundPlayer Mcd = new SoundPlayer("Resources\\noel.wav");
         public LoginForm()
         {
             InitializeComponent();
@@ -28,7 +29,7 @@ namespace uit_war
         bool IsValidUsername(string username)
         {
             //Chuan bi cau lenh query viet bang SQL
-            String sqlQuery = "select * from users where username='" + txtboxUsername.Text + "'";
+            String sqlQuery = "select * from users where username='" + username + "'";
             SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
             SqlDataReader reader = connection.Query(sqlQuery);
             if (reader.HasRows)
@@ -94,8 +95,6 @@ namespace uit_war
 
             ////////////////
             #endregion
-            if (IsValidUsername(txtboxUsername.Text))
-            {
                 Const.username = txtboxUsername.Text;
 
                 //if server is not exist
@@ -130,32 +129,18 @@ namespace uit_war
 
                     Const.currentTeam = true;//left team
                 }
-                //}
-                ////client
-                //else
-                //{
-                //    Program.socket.isServer = false;
-                //    ///
-                //    Program.login.Close();
-                //    Program.main.Text = "client";
-                //    Const.currentTeam = false;//right team
-                //}
-            }
-            else
-            {
-                MessageBox.Show("username đã tồn tại !!!");
-            }
+                
+            
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
+            Mcd.PlayLooping();
             txtboxMyIP.Text = SocketManager.GetLocalIPv4_v2();
         }
 
         private void btEnterRoom_Click(object sender, EventArgs e)
         {
-            if (IsValidUsername(txtboxUsername.Text))
-            {
                 try
                 {
                     //SocketManager.CloseConnection();
@@ -181,13 +166,16 @@ namespace uit_war
 
                     Const.currentTeam = false;//right team
                 }
-            }
-            else
-                MessageBox.Show("username đã tồn tại !!!");
+            
         }
 
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //logout current user
+            string sql = "update users set isLoggedIn=0 where username='" + txtboxUsername.Text + "'";
+            SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
+            conn.AddRemoveAlter(sql);
+            conn.Close();
             Application.Exit();
         }
 
@@ -217,14 +205,21 @@ namespace uit_war
         }
         private void LoginForm_Activated(object sender, EventArgs e)
         {
-            txtboxMyIP.Enabled = false;
-            DisableAllButton();
-            InitProperties();
-            SocketManager.CloseConnection();
+            if (string.IsNullOrEmpty(Const.username))
+            {
+                txtboxUsername.Enabled = false;
+                txtboxDatabaseIP.Text = txtboxMyIP.Text;
+                txtboxMyIP.Enabled = false;
+                txtboxRivalIP.Enabled = false;
+                DisableAllButton();
+                InitProperties();
+                SocketManager.CloseConnection();
+            }
         }
 
         private void btRank_Click(object sender, EventArgs e)
         {
+            Const.serverIP = txtboxDatabaseIP.Text;
             RankForm rankForm = new RankForm();
             rankForm.ShowDialog();
         }
@@ -241,6 +236,61 @@ namespace uit_war
             else
                 EnableAllButton();
         }
+
+        private void btDangki_Click(object sender, EventArgs e)
+        {
+            if (IsValidUsername(txtboxID.Text))
+            {
+                string sql = String.Format("insert into users values('{0}','{1}','{2}',{3})", txtboxID.Text, txtboxPassword.Text, 0,0);
+                SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
+                connection.AddRemoveAlter(sql);
+                connection.Close();
+                MessageBox.Show("Đăng kí thành công");
+            }
+            else
+            {
+                MessageBox.Show("username đã tồn tại !!!");
+            }
+        }
+
+        private void btDangNhap_Click(object sender, EventArgs e)
+        {
+            string sql = "select username,isLoggedIn from users where username='" + txtboxID.Text + "' and password='" + txtboxPassword.Text + "'";
+            SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
+            SqlDataReader reader = connection.Query(sql);
+           
+            if (reader.HasRows && reader.Read() && reader.GetInt32(1) == 0)
+            {
+                //create new connection to update login status
+                SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
+                string sqlcmd = "update users set isLoggedIn=1 where username='" + reader.GetString(0) + "'";
+                conn.AddRemoveAlter(sqlcmd);
+                conn.Close();
+                //
+                MessageBox.Show("Đăng nhập thành công");
+                txtboxUsername.Text = txtboxID.Text;
+                txtboxID.Text = "";
+                txtboxPassword.Text = "";
+                txtboxRivalIP.Enabled = true;
+                btCreateRoom.Enabled = true;
+                btEnterRoom.Enabled = true;
+                Const.username = txtboxUsername.Text;
+                Const.serverIP = txtboxDatabaseIP.Text;
+            }
+            else if (reader.HasRows && reader.GetInt32(1) == 1)
+            {
+                MessageBox.Show("Tài khoản đang được đăng nhập ở nơi khác !!!");
+            }
+            else
+            {
+                MessageBox.Show("Sai tên đăng nhập hoặc mật khẩu !!!");
+
+            }
+            connection.Close();
+
+        }
+
+        
     }
 
 

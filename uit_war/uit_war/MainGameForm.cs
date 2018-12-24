@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +19,8 @@ namespace uit_war
         CurrentItem currentItem;
         int availableMoney;
         int tropPrice = 0;
+        Process p = new Process();
+        public SoundPlayer Mcd = new SoundPlayer("Resources\\background.wav");
         #endregion
 
         public MainGameForm()
@@ -28,6 +32,7 @@ namespace uit_war
             InitProperties();
             InitRender();
             Listen();
+
         }
         private void InitRender()
         {
@@ -36,6 +41,11 @@ namespace uit_war
             Const.backBuffer = new Bitmap(this.ClientSize.Width,
             this.ClientSize.Height);
             // Lấy ảnh sprite
+            Const.healingSpell_tip = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\healingSpell_tip.png"));
+            Const.knight_tip = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\knight_tip.png"));
+            Const.megaman_tip = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\megaman_tip.png"));
+            Const.hulk_tip = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\hulk_tip.png"));
+
             Const.sprite_touch = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\touch.png"));
             Image image = Image.FromFile(Application.StartupPath + "\\Resources\\mario_right.png");
             Const.sprite_Mario_Right = new Bitmap(image);
@@ -94,6 +104,9 @@ namespace uit_war
         }
         private void InitProperties()
         {
+            p.StartInfo = new ProcessStartInfo("playsound.exe");
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
             Const.listSpells = new List<Spell>();
             Const.listSpells.Clear();
             Const.listTrops = new List<Trop>();
@@ -216,13 +229,19 @@ namespace uit_war
 
         private void exit_Click(object sender, EventArgs e)
         {
-            //Application.Exit();
-            //MessageBox.Show(this.ClientSize.Width.ToString() + "-" + this.ClientSize.Height.ToString());
-            availableMoney = 10;
-            SocketManager.CloseClientConnection();
+            //new Thread(() =>
+            //{
+            //availableMoney = 10;
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo("playsound.exe");
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.UseShellExecute = false;
+            p.Start();
+           // }).Start();
+            
         }
 
-       
+
         void ListenUntilReceivedData()
         {
             Thread listenThread = new Thread(() =>
@@ -339,7 +358,7 @@ namespace uit_war
                         //SocketManager.CloseConnection();
                         this.Close();
                         Program.login.Show();
-                        
+
                         //Program.main = null;
                     }));
                     break;
@@ -361,6 +380,13 @@ namespace uit_war
                 //check win/lose
                 for (int i = 0; i < Const.listTrops.Count; i++)
                 {
+                    //play hit sound if match has any trops fighting
+                    if(Const.listTrops[i].CurrentStatus)
+                        try {
+                            p.Kill();
+                            p.Start();
+                        }
+                        catch { }
                     //process win/lose
                     //trop outside screen
                     //and trop is my team
@@ -373,6 +399,10 @@ namespace uit_war
                         //notify rival that he was lose
                         Program.socket.Send(new SocketData((int)SocketCommand.END_GAME, currentItem, Point.Empty));
                         //update won_matchs in database
+                        SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
+                        string sql = "update users set won_matchs+=1 where username='" + Const.username + "'";
+                        conn.AddRemoveAlter(sql);
+                        conn.Close();
                         MessageBox.Show("You win");
                         this.Close();
                         Program.login.Show();
@@ -502,6 +532,7 @@ namespace uit_war
 
         private void MainGameForm_Shown(object sender, EventArgs e)
         {
+            Mcd.PlayLooping();
             RenderTool.Render();
             //if client--> run
             //send start signal to server
@@ -559,10 +590,11 @@ namespace uit_war
             for (int i = 0; i < Const.listSpells.Count; i++)
                 Const.listSpells[i].AvailableTime -= 2;
         }
-        PictureBox pictureBox= new PictureBox();
+        PictureBox pictureBox = new PictureBox();
         private void btHealingSpell_MouseHover(object sender, EventArgs e)
         {
-            pictureBox.Image = Image.FromFile(Application.StartupPath + "\\Resources\\play.jpg");
+            pictureBox.Size = Const.healingSpell_tip.Size;
+            pictureBox.Image = Const.healingSpell_tip;
             pictureBox.Location = new Point(btHealingSpell.Location.X, btHealingSpell.Location.Y + btHealingSpell.Height);
             this.Controls.Add(pictureBox);
         }
@@ -574,7 +606,8 @@ namespace uit_war
 
         private void btKnight_MouseHover(object sender, EventArgs e)
         {
-            pictureBox.Image = Image.FromFile(Application.StartupPath + "\\Resources\\play.jpg");
+            pictureBox.Size = Const.knight_tip.Size;
+            pictureBox.Image = Const.knight_tip;
             pictureBox.Location = new Point(btKnight.Location.X, btKnight.Location.Y + btKnight.Height);
             this.Controls.Add(pictureBox);
         }
@@ -586,7 +619,8 @@ namespace uit_war
 
         private void btMegaman_MouseHover(object sender, EventArgs e)
         {
-            pictureBox.Image = Image.FromFile(Application.StartupPath + "\\Resources\\play.jpg");
+            pictureBox.Size = Const.megaman_tip.Size;
+            pictureBox.Image = Const.megaman_tip;
             pictureBox.Location = new Point(btMegaman.Location.X, btMegaman.Location.Y + btMegaman.Height);
             this.Controls.Add(pictureBox);
         }
@@ -598,7 +632,8 @@ namespace uit_war
 
         private void btHulk_MouseHover(object sender, EventArgs e)
         {
-            pictureBox.Image = Image.FromFile(Application.StartupPath + "\\Resources\\play.jpg");
+            pictureBox.Size = Const.hulk_tip.Size;
+            pictureBox.Image = Const.hulk_tip;
             pictureBox.Location = new Point(btHulk.Location.X, btHulk.Location.Y + btHulk.Height);
             this.Controls.Add(pictureBox);
         }
@@ -621,9 +656,10 @@ namespace uit_war
                 //return homepage
                 //SocketManager.CloseConnection();
                 Program.login.Show();
-                
+
                 //this.Text = "thoat";
                 //MessageBox.Show("thoat");
+                Mcd.Stop();
             }
         }
     }

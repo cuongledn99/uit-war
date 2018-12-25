@@ -34,19 +34,19 @@ namespace uit_war
             set { message = value; }
         }
 
-        public CurrentTrop Current { get => current; set => current = value; }
+        public CurrentItem Current { get => current; set => current = value; }
 
-        private CurrentTrop current;
+        private CurrentItem current;
         //public SocketData(int command, string message, Point point)
         //{
         //    this.Command = command;
         //    this.Point = point;
         //    this.Message = message;
         //}
-        public SocketData(int command,CurrentTrop currentTrop,Point point)
+        public SocketData(int command, CurrentItem currentItem,Point point)
         {
             this.command = command;
-            this.Current = currentTrop;
+            this.Current = currentItem;
             this.point = point;
         }
     }
@@ -58,6 +58,7 @@ namespace uit_war
         NEW_GAME,
         UNDO,
         END_GAME,
-        QUIT
+        QUIT,
+        START_GAME
     }
 }

@@ -47,3 +47,8 @@ D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\MySql.Data.xml
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.csproj.CopyComplete
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.RankForm.resources
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\Interop.WMPLib.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\AxInterop.WMPLib.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.csproj.ResolveComReference.cache
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\Interop.WMPLib.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\AxInterop.WMPLib.dll

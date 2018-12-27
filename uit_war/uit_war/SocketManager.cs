@@ -57,7 +57,11 @@ namespace uit_war
 
             Thread acceptClient = new Thread(() =>
             {
-                client = server.Accept();
+                try
+                {
+                    client = server.Accept();
+                }
+                catch { }
             });
             acceptClient.IsBackground = true;
             acceptClient.Start();

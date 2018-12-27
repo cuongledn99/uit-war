@@ -20,13 +20,21 @@ namespace uit_war
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-             login = new LoginForm();
-             main = new MainGameForm();
-            //socket
-            socket = new SocketManager();
-            //
-            //login.ShowDialog();
-            Application.Run(login);
+            try
+            {
+                login = new LoginForm();
+                main = new MainGameForm();
+                //socket
+                socket = new SocketManager();
+                //
+                //login.ShowDialog();
+                Application.Run(login);
+            }
+            catch
+            {
+                MessageBox.Show("Không có kết nối mạng, vui lòng kiểm tra lại kết nối và khởi động lại game !!!");
+                Application.Exit();
+            }
         }
     }
 }

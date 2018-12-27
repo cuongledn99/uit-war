@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Facebook;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Dynamic;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -19,8 +21,8 @@ namespace uit_war
         CurrentItem currentItem;
         int availableMoney;
         int tropPrice = 0;
-        Process p = new Process();
-        public SoundPlayer Mcd = new SoundPlayer("Resources\\background.wav");
+        //Process p = new Process();
+        //public SoundPlayer Mcd = new SoundPlayer("Resources\\background.wav");
         #endregion
 
         public MainGameForm()
@@ -29,8 +31,11 @@ namespace uit_war
             //no care
             Control.CheckForIllegalCrossThreadCalls = false;
             availableMoney = 0;
+           
+
             InitProperties();
-            InitRender();
+                InitRender();
+
             Listen();
 
         }
@@ -104,9 +109,8 @@ namespace uit_war
         }
         private void InitProperties()
         {
-            p.StartInfo = new ProcessStartInfo("playsound.exe");
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.CreateNoWindow = true;
+
+
             Const.listSpells = new List<Spell>();
             Const.listSpells.Clear();
             Const.listTrops = new List<Trop>();
@@ -229,16 +233,7 @@ namespace uit_war
 
         private void exit_Click(object sender, EventArgs e)
         {
-            //new Thread(() =>
-            //{
-            //availableMoney = 10;
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo("playsound.exe");
-            p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.UseShellExecute = false;
-            p.Start();
-           // }).Start();
-            
+            axWindowsMediaPlayer1.Ctlcontrols.play();
         }
 
 
@@ -375,18 +370,21 @@ namespace uit_war
             Listen();
             try
             {
+                ////play fight sound if has any trops attacking
+                //for (int i = 0; i < Const.listTrops.Count; i++)
+                //{
+                //        if (Const.listTrops[i].CurrentStatus && axWindowsMediaPlayer1.playState != WMPLib.WMPPlayState.wmppsPlaying)
+                //        {
+                //            axWindowsMediaPlayer1.Ctlcontrols.play();
+                //            break;
+                //        }
+                //}
                 //remove trops 
                 //reset attacker's index for each trops
                 //check win/lose
                 for (int i = 0; i < Const.listTrops.Count; i++)
                 {
-                    //play hit sound if match has any trops fighting
-                    if(Const.listTrops[i].CurrentStatus)
-                        try {
-                            p.Kill();
-                            p.Start();
-                        }
-                        catch { }
+                    
                     //process win/lose
                     //trop outside screen
                     //and trop is my team
@@ -532,7 +530,6 @@ namespace uit_war
 
         private void MainGameForm_Shown(object sender, EventArgs e)
         {
-            Mcd.PlayLooping();
             RenderTool.Render();
             //if client--> run
             //send start signal to server
@@ -659,8 +656,24 @@ namespace uit_war
 
                 //this.Text = "thoat";
                 //MessageBox.Show("thoat");
-                Mcd.Stop();
             }
+        }
+
+        private void MainGameForm_Activated(object sender, EventArgs e)
+        {
+            axWindowsMediaPlayer1.URL = Application.StartupPath + "\\Resources\\hit.mp3";
+            axWindowsMediaPlayer2.URL = Application.StartupPath + "\\Resources\\background.wav";
+            axWindowsMediaPlayer2.settings.volume = 7;
+            axWindowsMediaPlayer1.Ctlcontrols.stop();
+            axWindowsMediaPlayer1.settings.volume = 30;
+            axWindowsMediaPlayer2.settings.autoStart = true;
+            axWindowsMediaPlayer2.settings.setMode("loop", true);
+        }
+
+        private void MainGameForm_Deactivate(object sender, EventArgs e)
+        {
+            axWindowsMediaPlayer1.Ctlcontrols.stop();
+            axWindowsMediaPlayer2.Ctlcontrols.stop();
         }
     }
 }

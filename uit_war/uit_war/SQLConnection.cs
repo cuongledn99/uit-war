@@ -27,6 +27,7 @@ namespace uit_war
                 isOpenedConnection = false;
             }
         }
+       
         public static string GetDatabasePath(string servername, string databasename, string username, string password)
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
@@ -40,6 +41,7 @@ namespace uit_war
             builder.Password = password;
             return builder.ToString();
         }
+        
         public SqlDataReader Query(string query)
         {
             //try to open connection if not opened yet

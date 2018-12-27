@@ -31,6 +31,7 @@ namespace uit_war
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainGameForm));
             this.exit = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer_increase_money = new System.Windows.Forms.Timer(this.components);
@@ -38,6 +39,10 @@ namespace uit_war
             this.btKnight = new System.Windows.Forms.Button();
             this.btMegaman = new System.Windows.Forms.Button();
             this.btHulk = new System.Windows.Forms.Button();
+            this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
+            this.axWindowsMediaPlayer2 = new AxWMPLib.AxWindowsMediaPlayer();
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer2)).BeginInit();
             this.SuspendLayout();
             // 
             // exit
@@ -61,7 +66,7 @@ namespace uit_war
             // 
             // btHealingSpell
             // 
-            //this.btHealingSpell.BackgroundImage = BackgroundImage.fro
+            this.btHealingSpell.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btHealingSpell.BackgroundImage")));
             this.btHealingSpell.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btHealingSpell.Location = new System.Drawing.Point(548, 0);
             this.btHealingSpell.Name = "btHealingSpell";
@@ -111,12 +116,34 @@ namespace uit_war
             this.btHulk.MouseLeave += new System.EventHandler(this.btHulk_MouseLeave);
             this.btHulk.MouseHover += new System.EventHandler(this.btHulk_MouseHover);
             // 
+            // axWindowsMediaPlayer1
+            // 
+            this.axWindowsMediaPlayer1.Enabled = true;
+            this.axWindowsMediaPlayer1.Location = new System.Drawing.Point(375, 87);
+            this.axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
+            this.axWindowsMediaPlayer1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer1.OcxState")));
+            this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(75, 23);
+            this.axWindowsMediaPlayer1.TabIndex = 11;
+            this.axWindowsMediaPlayer1.Visible = false;
+            // 
+            // axWindowsMediaPlayer2
+            // 
+            this.axWindowsMediaPlayer2.Enabled = true;
+            this.axWindowsMediaPlayer2.Location = new System.Drawing.Point(380, 269);
+            this.axWindowsMediaPlayer2.Name = "axWindowsMediaPlayer2";
+            this.axWindowsMediaPlayer2.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer2.OcxState")));
+            this.axWindowsMediaPlayer2.Size = new System.Drawing.Size(75, 23);
+            this.axWindowsMediaPlayer2.TabIndex = 12;
+            this.axWindowsMediaPlayer2.Visible = false;
+            // 
             // MainGameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(834, 561);
+            this.Controls.Add(this.axWindowsMediaPlayer2);
+            this.Controls.Add(this.axWindowsMediaPlayer1);
             this.Controls.Add(this.btHealingSpell);
             this.Controls.Add(this.btKnight);
             this.Controls.Add(this.btMegaman);
@@ -127,9 +154,13 @@ namespace uit_war
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainGameForm";
             this.Text = "Form1";
+            this.Activated += new System.EventHandler(this.MainGameForm_Activated);
+            this.Deactivate += new System.EventHandler(this.MainGameForm_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainGameForm_FormClosing);
             this.Shown += new System.EventHandler(this.MainGameForm_Shown);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -142,6 +173,8 @@ namespace uit_war
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer_increase_money;
         private System.Windows.Forms.Button btHealingSpell;
+        private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
+        private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer2;
     }
 }
 

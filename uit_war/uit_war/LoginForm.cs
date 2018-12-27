@@ -17,14 +17,15 @@ namespace uit_war
     public partial class LoginForm : Form
     {
         public static bool isServer = false;
-        public SoundPlayer Mcd = new SoundPlayer("Resources\\noel.wav");
+        //public SoundPlayer Mcd = new SoundPlayer("Resources\\noel.wav");
         public LoginForm()
         {
             InitializeComponent();
             //no care
             Control.CheckForIllegalCrossThreadCalls = false;
-
-
+            //axWindowsMediaPlayer1.URL = Application.StartupPath + "\\Resources\\noel.wav";
+            //axWindowsMediaPlayer1.settings.autoStart = true;
+            //axWindowsMediaPlayer1.settings.setMode("loop", true);
         }
         bool IsValidUsername(string username)
         {
@@ -95,78 +96,70 @@ namespace uit_war
 
             ////////////////
             #endregion
-                Const.username = txtboxUsername.Text;
+            Const.username = txtboxUsername.Text;
 
-                //if server is not exist
-                //create server
-                //waiting for connect from client
-                //if (!Program.socket.ConnectServer())
-                // {
-                try
-                {
-                    // SocketManager.CloseConnection();
-                    Program.socket.isServer = true;
-                    Program.socket.CreateServer();
-                    ///
-                    Program.main = new MainGameForm();
-                    Program.main.Text = "server";
-                    Program.login.Hide();
-                    Program.main.Show();
+            //if server is not exist
+            //create server
+            //waiting for connect from client
+            //if (!Program.socket.ConnectServer())
+            // {
+            try
+            {
+                // SocketManager.CloseConnection();
+                Program.socket.isServer = true;
+                Program.socket.CreateServer();
+                ///
+                Program.main = new MainGameForm();
+                Program.main.Text = "server";
+                Program.login.Hide();
+                Program.main.Show();
 
-                    Const.currentTeam = true;//left team 
-                }
-                catch
-                {
-                    Program.socket = null;
-                    Program.socket = new SocketManager();
-                    Program.socket.isServer = true;
-                    Program.socket.CreateServer();
-                    ///
-                    Program.main = new MainGameForm();
-                    Program.main.Text = "server";
-                    Program.login.Hide();
-                    Program.main.Show();
+                Const.currentTeam = true;//left team 
+            }
+            catch
+            {
+                Program.socket = null;
+                Program.socket = new SocketManager();
+                Program.socket.isServer = true;
+                Program.socket.CreateServer();
+                ///
+                Program.main = new MainGameForm();
+                Program.main.Text = "server";
+                Program.login.Hide();
+                Program.main.Show();
 
-                    Const.currentTeam = true;//left team
-                }
-                
-            
+                Const.currentTeam = true;//left team
+            }
+
+
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-            Mcd.PlayLooping();
+           // Mcd.PlayLooping();
             txtboxMyIP.Text = SocketManager.GetLocalIPv4_v2();
         }
 
         private void btEnterRoom_Click(object sender, EventArgs e)
         {
-                try
-                {
-                    //SocketManager.CloseConnection();
-                    SocketManager.ConnectServer(txtboxRivalIP.Text, 9999);
-                    Program.socket.isServer = false;
-                    //Program.login.Close();
-                    Program.main = new MainGameForm();
-                    Program.main.Text = "client";
-                    Program.login.Hide();
-                    Program.main.Show();
+            try
+            {
+                //SocketManager.CloseConnection();
+                SocketManager.ConnectServer(txtboxRivalIP.Text, 9999);
+                Program.socket.isServer = false;
+                //Program.login.Close();
+                Program.main = new MainGameForm();
+                Program.main.Text = "client";
+                Program.login.Hide();
+                Program.main.Show();
 
-                    Const.currentTeam = false;//right team
-                }
-                catch
-                {
-                    SocketManager.ConnectServer(txtboxRivalIP.Text, 9999);
-                    Program.socket.isServer = false;
-                    //Program.login.Close();
-                    Program.main = new MainGameForm();
-                    Program.main.Text = "client";
-                    Program.login.Hide();
-                    Program.main.Show();
+                Const.currentTeam = false;//right team
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Trận đấu chưa được tạo !!!");
+            }
 
-                    Const.currentTeam = false;//right team
-                }
-            
         }
 
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -213,8 +206,8 @@ namespace uit_war
                 txtboxRivalIP.Enabled = false;
                 DisableAllButton();
                 InitProperties();
-                SocketManager.CloseConnection();
             }
+            SocketManager.CloseConnection();
         }
 
         private void btRank_Click(object sender, EventArgs e)
@@ -241,7 +234,7 @@ namespace uit_war
         {
             if (IsValidUsername(txtboxID.Text))
             {
-                string sql = String.Format("insert into users values('{0}','{1}','{2}',{3})", txtboxID.Text, txtboxPassword.Text, 0,0);
+                string sql = String.Format("insert into users values('{0}','{1}','{2}',{3})", txtboxID.Text, txtboxPassword.Text, 0, 0);
                 SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
                 connection.AddRemoveAlter(sql);
                 connection.Close();
@@ -258,12 +251,15 @@ namespace uit_war
             string sql = "select username,isLoggedIn from users where username='" + txtboxID.Text + "' and password='" + txtboxPassword.Text + "'";
             SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
             SqlDataReader reader = connection.Query(sql);
-           
+
             if (reader.HasRows && reader.Read() && reader.GetInt32(1) == 0)
             {
                 //create new connection to update login status
                 SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
                 string sqlcmd = "update users set isLoggedIn=1 where username='" + reader.GetString(0) + "'";
+                conn.AddRemoveAlter(sqlcmd);
+                //try to logout current user
+                sqlcmd= "update users set isLoggedIn=0 where username='" + txtboxUsername.Text+ "'";
                 conn.AddRemoveAlter(sqlcmd);
                 conn.Close();
                 //
@@ -274,6 +270,8 @@ namespace uit_war
                 txtboxRivalIP.Enabled = true;
                 btCreateRoom.Enabled = true;
                 btEnterRoom.Enabled = true;
+                
+
                 Const.username = txtboxUsername.Text;
                 Const.serverIP = txtboxDatabaseIP.Text;
             }
@@ -290,7 +288,7 @@ namespace uit_war
 
         }
 
-        
+
     }
 
 

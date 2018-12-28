@@ -48,6 +48,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
+            this.btShare = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -219,6 +220,16 @@
             this.axWindowsMediaPlayer1.TabIndex = 18;
             this.axWindowsMediaPlayer1.Visible = false;
             // 
+            // btShare
+            // 
+            this.btShare.Location = new System.Drawing.Point(668, 12);
+            this.btShare.Name = "btShare";
+            this.btShare.Size = new System.Drawing.Size(104, 23);
+            this.btShare.TabIndex = 19;
+            this.btShare.Text = "Chia sẻ";
+            this.btShare.UseVisualStyleBackColor = true;
+            this.btShare.Click += new System.EventHandler(this.btShare_Click);
+            // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -226,6 +237,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btShare);
             this.Controls.Add(this.axWindowsMediaPlayer1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -279,5 +291,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
+        private System.Windows.Forms.Button btShare;
     }
 }

@@ -233,7 +233,10 @@ namespace uit_war
 
         private void exit_Click(object sender, EventArgs e)
         {
-            axWindowsMediaPlayer1.Ctlcontrols.play();
+            if (panel1.IsDisposed)
+                MessageBox.Show("show");
+            else
+                MessageBox.Show("hideing");
         }
 
 
@@ -356,6 +359,19 @@ namespace uit_war
 
                         //Program.main = null;
                     }));
+                    break;
+                case (int)SocketCommand.SEND_MESSAGE:
+                    //show message of rival
+                    richTextBox1.AppendText("\n\n" + data.Message+"\n\n");
+                    int startIndex = richTextBox1.GetFirstCharIndexFromLine(richTextBox1.Lines.Length - 3);
+                    int lastIndex = richTextBox1.TextLength-2;
+                    richTextBox1.Select(startIndex, lastIndex);
+                    richTextBox1.SelectionAlignment = HorizontalAlignment.Left;
+                    richTextBox1.SelectionBackColor = Color.LightGray;
+                    richTextBox1.SelectionColor = Color.Black;
+                    richTextBox1.SelectionFont = new Font("Arial", 15);
+                    richTextBox1.ScrollToCaret();
+                    richTextBox1.DeselectAll();
                     break;
                 default:
                     break;
@@ -674,6 +690,74 @@ namespace uit_war
         {
             axWindowsMediaPlayer1.Ctlcontrols.stop();
             axWindowsMediaPlayer2.Ctlcontrols.stop();
+        }
+        int rows = 0;
+        private void btSend_Click(object sender, EventArgs e)
+        {
+            SendMessage();
+        }
+        private void SendMessage()
+        {
+            //show message on chat box
+            richTextBox1.AppendText("\n\n" + txtboxChat.Text + "\n\n");
+
+            int startIndex = richTextBox1.GetFirstCharIndexFromLine(richTextBox1.Lines.Length - 3);
+            int lastIndex = richTextBox1.TextLength - 2;
+            richTextBox1.Select(startIndex, lastIndex);
+            richTextBox1.SelectionAlignment = HorizontalAlignment.Right;
+            richTextBox1.SelectionBackColor = Color.Blue;
+            richTextBox1.SelectionColor = Color.White;
+            richTextBox1.SelectionFont = new Font("Arial", 15);
+            richTextBox1.ScrollToCaret();
+            //send message to rival
+            Program.socket.Send(new SocketData((int)SocketCommand.SEND_MESSAGE, txtboxChat.Text));
+            txtboxChat.Clear();
+            richTextBox1.DeselectAll();
+        }
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MainGameForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            //send message if
+            //press enter
+            //chat box is opening
+            //textbox not empty and focused
+            //if (e.KeyCode == Keys.A && Const.currentChatBoxStatus && txtboxChat.Focused && txtboxChat.Text != "")
+            //    SendMessage();
+            MessageBox.Show(e.KeyCode.ToString());
+        }
+
+        private void picboxChatHead_MouseHover(object sender, EventArgs e)
+        {
+            ToolTip tt = new ToolTip();
+            tt.SetToolTip(picboxChatHead, "Bấm để đóng/mở");
+        }
+
+        private void picboxChatHead_Click(object sender, EventArgs e)
+        {
+            Const.currentChatBoxStatus = !Const.currentChatBoxStatus;
+            //show chat box
+            if (Const.currentChatBoxStatus)
+            {
+                picboxChatHead.Location = new Point(0, panel1.Location.Y - picboxChatHead.Height);
+                panel1.Show();
+            }
+            //hide chat box
+            else
+            {
+                picboxChatHead.Location = new Point(0, this.ClientSize.Height-picboxChatHead.Height);
+                panel1.Hide();
+            }
+               
+        }
+
+        private void txtboxChat_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode== Keys.Enter && txtboxChat.Text != "")
+                SendMessage();
         }
     }
 }

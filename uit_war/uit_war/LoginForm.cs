@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Media;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace uit_war
 {
@@ -44,58 +47,10 @@ namespace uit_war
         // tạo phòng
         private void connect_Click(object sender, EventArgs e)
         {
-            #region mycode
-            //Const.client.CreateClient();
-            ////server
-            //if (!Const.client.isConnectedToServer())
-            //{
-            //    isServer = true;
-            //    Const.server.CreateServer(Const.IP, Const.PORT);
-
-            //    Const.server.WaitingConnection();
-            //    Form1 f1 = new Form1();
-            //    f1.Text = "server";
-            //    f1.Show();
-            //    this.Hide();
-            //    //Thread task1 = new Thread(() =>
-            //    //{
-            //    //    while (true)
-            //    //    {
-            //    //        server.Show();
-            //    //    }
-            //    //});
-            //    //task1.Start();
-
-            //    //while (true)
-            //    //{
-            //    //    server.Send();
-            //    //}
-            //}
-            ////client
-            //else
-            //{
-            //    isServer = false;
-            //    Const.client.ConnectServer(Const.IP, Const.PORT);
-            //    Form1 f1 = new Form1();
-            //    f1.Text = "client";
-            //    f1.Show();
-            //    this.Hide();
-            //    //Thread task2 = new Thread(() =>
-            //    //{
-            //    //    while (true)
-            //    //    {
-            //    //        client.Show();
-            //    //    }
-            //    //});
-            //    //task2.Start();
-            //    //while (true)
-            //    //{
-            //    //    client.Send(20, 20);
-            //    //}
-            //}
+           
 
             ////////////////
-            #endregion
+            
             Const.username = txtboxUsername.Text;
 
             //if server is not exist
@@ -215,7 +170,10 @@ namespace uit_war
             Const.serverIP = txtboxDatabaseIP.Text;
             RankForm rankForm = new RankForm();
             rankForm.ShowDialog();
+
         }
+
+        
 
         private void lbMyIP_Click(object sender, EventArgs e)
         {
@@ -288,7 +246,26 @@ namespace uit_war
 
         }
 
+        private void btShare_Click(object sender, EventArgs e)
+        {
+            using (var client = new WebClient())
+            {
+                var values = new NameValueCollection();
+                values["access_token"] = "2017210028392743|b6ca22605f1deda41ac0df3b7fda5ba0";
+                values["href"] = "https://sites.google.com/a/gm.uit.edu.vn/uit-war/";
 
+                var response = client.UploadValues("https://graph.facebook.com/device/share", values);
+                var responseString = Encoding.Default.GetString(response);
+                Dictionary<string, string> user_code = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseString);
+                DialogResult res= MessageBox.Show("Vui lòng đi đến liên kết này " + "https://www.facebook.com/device \n Nhập mã "+ user_code["user_code"]+" để chia sẻ \n Bấm OK để copy mã và tự động chuyển đến liên kết");
+                if(res == DialogResult.OK)
+                {
+                    Clipboard.SetText(user_code["user_code"]);
+                    System.Diagnostics.Process.Start("https://www.facebook.com/device");
+                }
+            }
+            
+        }
     }
 
 

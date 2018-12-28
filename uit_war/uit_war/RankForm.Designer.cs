@@ -101,6 +101,7 @@
             this.Name = "RankForm";
             this.Text = "RankForm";
             this.Load += new System.EventHandler(this.RankForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RankForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

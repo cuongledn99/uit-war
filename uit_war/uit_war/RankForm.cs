@@ -53,5 +53,10 @@ namespace uit_war
             }
             connection.Close();
         }
+
+        private void RankForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            MessageBox.Show(e.KeyCode.ToString());
+        }
     }
 }

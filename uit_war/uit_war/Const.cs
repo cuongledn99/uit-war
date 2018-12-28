@@ -91,6 +91,7 @@ namespace uit_war
         // false: right team
         public static bool currentTeam=true;
 
+        public static bool currentChatBoxStatus=true;
         //public static int index_fire;
         //// dòng hiện tại của frame
         //public static int curFrameColumn_fire;

@@ -52,3 +52,8 @@ D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Debug\uit_war.csproj.ResolveComReference.cache
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\Interop.WMPLib.dll
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\AxInterop.WMPLib.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\Facebook.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\Newtonsoft.Json.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\Facebook.xml
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\Newtonsoft.Json.pdb
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Debug\Newtonsoft.Json.xml

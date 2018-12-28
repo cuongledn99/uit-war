@@ -41,8 +41,15 @@ namespace uit_war
             this.btHulk = new System.Windows.Forms.Button();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.axWindowsMediaPlayer2 = new AxWMPLib.AxWindowsMediaPlayer();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.txtboxChat = new System.Windows.Forms.TextBox();
+            this.btSend = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.picboxChatHead = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer2)).BeginInit();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picboxChatHead)).BeginInit();
             this.SuspendLayout();
             // 
             // exit
@@ -136,12 +143,62 @@ namespace uit_war
             this.axWindowsMediaPlayer2.TabIndex = 12;
             this.axWindowsMediaPlayer2.Visible = false;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.richTextBox1);
+            this.panel1.Controls.Add(this.btSend);
+            this.panel1.Controls.Add(this.txtboxChat);
+            this.panel1.Location = new System.Drawing.Point(0, 342);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(235, 219);
+            this.panel1.TabIndex = 13;
+            // 
+            // txtboxChat
+            // 
+            this.txtboxChat.Location = new System.Drawing.Point(3, 196);
+            this.txtboxChat.Name = "txtboxChat";
+            this.txtboxChat.Size = new System.Drawing.Size(169, 20);
+            this.txtboxChat.TabIndex = 0;
+            this.txtboxChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtboxChat_KeyDown);
+            // 
+            // btSend
+            // 
+            this.btSend.Location = new System.Drawing.Point(170, 193);
+            this.btSend.Name = "btSend";
+            this.btSend.Size = new System.Drawing.Size(65, 26);
+            this.btSend.TabIndex = 14;
+            this.btSend.Text = "Gửi";
+            this.btSend.UseVisualStyleBackColor = true;
+            this.btSend.Click += new System.EventHandler(this.btSend_Click);
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(232, 190);
+            this.richTextBox1.TabIndex = 15;
+            this.richTextBox1.Text = "";
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            // 
+            // picboxChatHead
+            // 
+            this.picboxChatHead.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.picboxChatHead.Location = new System.Drawing.Point(0, 317);
+            this.picboxChatHead.Name = "picboxChatHead";
+            this.picboxChatHead.Size = new System.Drawing.Size(235, 25);
+            this.picboxChatHead.TabIndex = 16;
+            this.picboxChatHead.TabStop = false;
+            this.picboxChatHead.Click += new System.EventHandler(this.picboxChatHead_Click);
+            this.picboxChatHead.MouseHover += new System.EventHandler(this.picboxChatHead_MouseHover);
+            // 
             // MainGameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(834, 561);
+            this.Controls.Add(this.picboxChatHead);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.axWindowsMediaPlayer2);
             this.Controls.Add(this.axWindowsMediaPlayer1);
             this.Controls.Add(this.btHealingSpell);
@@ -158,9 +215,13 @@ namespace uit_war
             this.Deactivate += new System.EventHandler(this.MainGameForm_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainGameForm_FormClosing);
             this.Shown += new System.EventHandler(this.MainGameForm_Shown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainGameForm_KeyDown);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer2)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picboxChatHead)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -175,6 +236,11 @@ namespace uit_war
         private System.Windows.Forms.Button btHealingSpell;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer2;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Button btSend;
+        private System.Windows.Forms.TextBox txtboxChat;
+        private System.Windows.Forms.PictureBox picboxChatHead;
     }
 }
 

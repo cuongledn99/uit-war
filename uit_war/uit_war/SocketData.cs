@@ -49,6 +49,11 @@ namespace uit_war
             this.Current = currentItem;
             this.point = point;
         }
+        public SocketData(int command,string message)
+        {
+            this.command = command;
+            this.Message = message;
+        }
     }
 
     public enum SocketCommand
@@ -59,6 +64,7 @@ namespace uit_war
         UNDO,
         END_GAME,
         QUIT,
-        START_GAME
+        START_GAME,
+        SEND_MESSAGE
     }
 }

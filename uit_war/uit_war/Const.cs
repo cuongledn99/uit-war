@@ -92,6 +92,8 @@ namespace uit_war
         public static bool currentTeam=true;
 
         public static bool currentChatBoxStatus=true;
+        public static string access_token = "";
+        public static string requestURL = "";
         //public static int index_fire;
         //// dòng hiện tại của frame
         //public static int curFrameColumn_fire;

@@ -40,23 +40,41 @@ namespace uit_war
         private void LoadDataToTable(string databaseIP)
         {
             //Chuan bi cau lenh query viet bang SQL
-            String sqlQuery = "select username,won_matchs from users order by won_matchs desc";
+            String sqlQuery = "select top 5 username,won_matchs from users order by won_matchs desc";
             SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(databaseIP+",6969","doan","admin","cuong123"));
             SqlDataReader reader = connection.Query(sqlQuery);
-            //Su dung reader de doc tung dong du lieu
-            //va thuc hien thao tac xu ly mong muon voi du lieu doc len
+            lbTitle.Font= new Font("Arial", 22);
+            lbTitle.ForeColor = Color.Yellow;
+            lbTitle.Location = new Point((this.ClientSize.Width - lbTitle.Width) / 2, 0);
+            lbTitle.BackColor = Color.Transparent;
+            int y = 40;
             while (reader.HasRows)//con dong du lieu thi doc tiep
             {
-                if (reader.Read() == false) return;//doc ko duoc thi return
-                                                   //xu ly khi da doc du lieu len
-                dataGridView1.Rows.Add(reader.GetString(0), reader.GetInt32(1));
+                if (reader.Read() == false)
+                    return;//doc ko duoc thi return
+                           //dataGridView1.Rows.Add(reader.GetString(0), reader.GetInt32(1));
+                Label labelName = new Label();
+                labelName.Location = new Point(20, y);
+                labelName.Font= new Font("Arial", 22);
+                labelName.Size = new Size(labelName.Width + 100, labelName.Height+20);
+                labelName.Text = reader.GetString(0);
+                labelName.BackColor = Color.Transparent;
+                labelName.ForeColor = Color.White;
+                Label lbScore = new Label();
+                lbScore.Location = new Point(labelName.Location.X+labelName.Width, y);
+                lbScore.Font= new Font("Arial", 22);
+                lbScore.Size = new Size(lbScore.Width+10, lbScore.Height + 20);
+                lbScore.RightToLeft = RightToLeft.Yes;
+                lbScore.Text = reader.GetInt32(1).ToString();
+                lbScore.BackColor = Color.Transparent;
+                lbScore.ForeColor = Color.White;
+                Controls.Add(labelName);
+                Controls.Add(lbScore);
+                y += labelName.Height;
             }
             connection.Close();
         }
 
-        private void RankForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            MessageBox.Show(e.KeyCode.ToString());
-        }
+        
     }
 }

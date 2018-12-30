@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Media;
@@ -13,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using xNet;
 
 namespace uit_war
 {
@@ -47,10 +49,10 @@ namespace uit_war
         // tạo phòng
         private void connect_Click(object sender, EventArgs e)
         {
-           
+
 
             ////////////////
-            
+
             Const.username = txtboxUsername.Text;
 
             //if server is not exist
@@ -91,7 +93,7 @@ namespace uit_war
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-           // Mcd.PlayLooping();
+            // Mcd.PlayLooping();
             txtboxMyIP.Text = SocketManager.GetLocalIPv4_v2();
         }
 
@@ -170,10 +172,9 @@ namespace uit_war
             Const.serverIP = txtboxDatabaseIP.Text;
             RankForm rankForm = new RankForm();
             rankForm.ShowDialog();
-
         }
 
-        
+
 
         private void lbMyIP_Click(object sender, EventArgs e)
         {
@@ -217,7 +218,7 @@ namespace uit_war
                 string sqlcmd = "update users set isLoggedIn=1 where username='" + reader.GetString(0) + "'";
                 conn.AddRemoveAlter(sqlcmd);
                 //try to logout current user
-                sqlcmd= "update users set isLoggedIn=0 where username='" + txtboxUsername.Text+ "'";
+                sqlcmd = "update users set isLoggedIn=0 where username='" + txtboxUsername.Text + "'";
                 conn.AddRemoveAlter(sqlcmd);
                 conn.Close();
                 //
@@ -228,7 +229,7 @@ namespace uit_war
                 txtboxRivalIP.Enabled = true;
                 btCreateRoom.Enabled = true;
                 btEnterRoom.Enabled = true;
-                
+
 
                 Const.username = txtboxUsername.Text;
                 Const.serverIP = txtboxDatabaseIP.Text;
@@ -257,18 +258,93 @@ namespace uit_war
                 var response = client.UploadValues("https://graph.facebook.com/device/share", values);
                 var responseString = Encoding.Default.GetString(response);
                 Dictionary<string, string> user_code = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseString);
-                DialogResult res= MessageBox.Show("Vui lòng đi đến liên kết này " + "https://www.facebook.com/device \n Nhập mã "+ user_code["user_code"]+" để chia sẻ \n Bấm OK để copy mã và tự động chuyển đến liên kết");
-                if(res == DialogResult.OK)
+                DialogResult res = MessageBox.Show("Vui lòng đi đến liên kết này " + "https://www.facebook.com/device \n Nhập mã " + user_code["user_code"] + " để chia sẻ \n Bấm OK để copy mã và tự động chuyển đến liên kết", "Chia sẻ bằng Facebook", MessageBoxButtons.OKCancel);
+                if (res == DialogResult.OK)
                 {
                     Clipboard.SetText(user_code["user_code"]);
                     System.Diagnostics.Process.Start("https://www.facebook.com/device");
                 }
             }
-            
+
+        }
+
+        //login by facebook
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.facebook.com/dialog/oauth?client_id=2017210028392743&redirect_uri=https://lephamhuycuong.000webhostapp.com/callback.php&scope=public_profile&state=" + txtboxMyIP.Text);
+            Thread thread = new Thread(()=> {
+                RequestUntilHaveURL();
+                DeteleUsedURL();
+                Const.access_token = GetToken(Const.requestURL);
+                ShowUsernameAfterFBLogin();
+                EnableAllButton();
+                txtboxMyIP.Enabled = true;
+                txtboxRivalIP.Enabled = true;
+            });
+            thread.IsBackground = true;
+            thread.Start();
+        }
+        private void DeteleUsedURL()
+        {
+            HttpRequest httpClient = new HttpRequest();
+            string url = "http://lephamhuycuong.000webhostapp.com/api.php/deleteURL";
+            string data = "{\"ip\":\"" + txtboxMyIP.Text + "\"}";
+            string content_type = "application/json";
+            httpClient.Post(url, data, content_type);
+        }
+        private void ShowUsernameAfterFBLogin()
+        {
+            try
+            {
+                string[] userinfo = GetUserInfo(Const.access_token);
+                txtboxUsername.Text = userinfo[1];
+            }
+            catch ( Exception)
+            {
+                Thread.Sleep(500);
+                ShowUsernameAfterFBLogin();
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="access_token"></param>
+        /// <returns>
+        /// arr[0]=user_id
+        /// arr[1]=username
+        /// </returns>
+        private string[] GetUserInfo(string access_token)
+        {
+            HttpRequest httpClient = new HttpRequest();
+            string result = httpClient.Get("https://graph.facebook.com/me?access_token="+access_token, null).ToString();
+            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+            string[] userinfo = new string[2];
+            userinfo[0] = data["id"];
+            userinfo[1] = data["name"];
+            return userinfo;
+        }
+        private string GetToken(string requestURL)
+        {
+            HttpRequest httpClient = new HttpRequest();
+            string result = httpClient.Get(requestURL, null).ToString();
+            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+            return data["access_token"];
+        }
+        private void RequestUntilHaveURL()
+        {
+            try
+            {
+                HttpRequest httpClient = new HttpRequest();
+                string result = httpClient.Get("http://lephamhuycuong.000webhostapp.com/api.php/requestURL", null).ToString();
+                Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+                Const.requestURL= data[txtboxMyIP.Text];
+            }
+            catch (Exception)
+            {
+                Thread.Sleep(2000);
+                RequestUntilHaveURL();
+            }
         }
     }
-
-
-
 
 }

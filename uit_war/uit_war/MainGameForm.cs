@@ -288,6 +288,8 @@ namespace uit_war
                         btKnight.Show();
                         btHulk.Show();
                         btHealingSpell.Show();
+                        panel1.Show();
+                        picboxChatHead.Show();
                         timer1.Start();
                         timer_increase_money.Start();
                     }));
@@ -386,15 +388,6 @@ namespace uit_war
             Listen();
             try
             {
-                ////play fight sound if has any trops attacking
-                //for (int i = 0; i < Const.listTrops.Count; i++)
-                //{
-                //        if (Const.listTrops[i].CurrentStatus && axWindowsMediaPlayer1.playState != WMPLib.WMPPlayState.wmppsPlaying)
-                //        {
-                //            axWindowsMediaPlayer1.Ctlcontrols.play();
-                //            break;
-                //        }
-                //}
                 //remove trops 
                 //reset attacker's index for each trops
                 //check win/lose
@@ -563,6 +556,8 @@ namespace uit_war
                 btKnight.Hide();
                 btMegaman.Hide();
                 btHulk.Hide();
+                panel1.Hide();
+                picboxChatHead.Hide();
                 ListenUntilReceivedData();
             }
         }

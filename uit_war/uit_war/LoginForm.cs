@@ -338,6 +338,9 @@ namespace uit_war
                 string result = httpClient.Get("http://lephamhuycuong.000webhostapp.com/api.php/requestURL", null).ToString();
                 Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
                 Const.requestURL= data[txtboxMyIP.Text];
+                EnableAllButton();
+                txtboxMyIP.Enabled = true;
+                txtboxRivalIP.Enabled = true;
             }
             catch (Exception)
             {

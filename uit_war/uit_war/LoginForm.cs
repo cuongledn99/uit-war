@@ -35,8 +35,8 @@ namespace uit_war
         bool IsValidUsername(string username)
         {
             //Chuan bi cau lenh query viet bang SQL
-            String sqlQuery = "select * from users where username='" + username + "'";
-            SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
+            String sqlQuery = "select * from users where id='" + username + "'";
+            SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
             SqlDataReader reader = connection.Query(sqlQuery);
             if (reader.HasRows)
             {
@@ -93,58 +93,27 @@ namespace uit_war
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-            // Mcd.PlayLooping();
-            txtboxMyIP.Text = SocketManager.GetLocalIPv4_v2();
+            txtboxDatabaseIP.Text = SocketManager.GetLocalIPv4_v2();
+            Const.serverIP = SocketManager.GetLocalIPv4_v2();
+            Const.myIP = SocketManager.GetLocalIPv4_v2();
         }
 
-        private void btEnterRoom_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                //SocketManager.CloseConnection();
-                SocketManager.ConnectServer(txtboxRivalIP.Text, 9999);
-                Program.socket.isServer = false;
-                //Program.login.Close();
-                Program.main = new MainGameForm();
-                Program.main.Text = "client";
-                Program.login.Hide();
-                Program.main.Show();
-
-                Const.currentTeam = false;//right team
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Trận đấu chưa được tạo !!!");
-            }
-
-        }
+        
 
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             //logout current user
-            string sql = "update users set isLoggedIn=0 where username='" + txtboxUsername.Text + "'";
+            string sql = "update users set isLoggedIn=0 where id='" + Const.userInfo[0] + "'";
             SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
             conn.AddRemoveAlter(sql);
             conn.Close();
             Application.Exit();
         }
 
-        private void btCopy_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(txtboxMyIP.Text);
-        }
+        
 
 
-        private void EnableAllButton()
-        {
-            btEnterRoom.Enabled = true;
-            btCreateRoom.Enabled = true;
-        }
-        private void DisableAllButton()
-        {
-            btCreateRoom.Enabled = false;
-            btEnterRoom.Enabled = false;
-        }
+        
         private void InitProperties()
         {
             Const.listSpells = new List<Spell>();
@@ -155,13 +124,11 @@ namespace uit_war
         }
         private void LoginForm_Activated(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(Const.username))
+            if (string.IsNullOrEmpty(txtboxUsername.Text))
             {
                 txtboxUsername.Enabled = false;
-                txtboxDatabaseIP.Text = txtboxMyIP.Text;
-                txtboxMyIP.Enabled = false;
-                txtboxRivalIP.Enabled = false;
-                DisableAllButton();
+                //DisableAllButton();
+                btFindMatch.Enabled = false;
                 InitProperties();
             }
             SocketManager.CloseConnection();
@@ -184,17 +151,17 @@ namespace uit_war
         private void txtboxUsername_TextChanged(object sender, EventArgs e)
         {
             if (txtboxUsername.Text.ToString() == "")
-                DisableAllButton();
+                btFindMatch.Enabled = false;
             else
-                EnableAllButton();
+                btFindMatch.Enabled = true;
         }
 
         private void btDangki_Click(object sender, EventArgs e)
         {
             if (IsValidUsername(txtboxID.Text))
             {
-                string sql = String.Format("insert into users values('{0}','{1}','{2}',{3})", txtboxID.Text, txtboxPassword.Text, 0, 0);
-                SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
+                string sql = String.Format("insert into users values(N'{0}',N'{1}',N'{2}',{3},{4},'{5}',0)", txtboxID.Text, txtboxID.Text, txtboxPassword.Text, 0, 0, Const.myIP);
+                SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
                 connection.AddRemoveAlter(sql);
                 connection.Close();
                 MessageBox.Show("Đăng kí thành công");
@@ -207,29 +174,33 @@ namespace uit_war
 
         private void btDangNhap_Click(object sender, EventArgs e)
         {
-            string sql = "select username,isLoggedIn from users where username='" + txtboxID.Text + "' and password='" + txtboxPassword.Text + "'";
-            SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
+            string sql = "select name,isLoggedIn from users where id='" + txtboxID.Text + "' and password='" + txtboxPassword.Text + "'";
+            SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
             SqlDataReader reader = connection.Query(sql);
 
             if (reader.HasRows && reader.Read() && reader.GetInt32(1) == 0)
             {
-                //create new connection to update login status
                 SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
-                string sqlcmd = "update users set isLoggedIn=1 where username='" + reader.GetString(0) + "'";
-                conn.AddRemoveAlter(sqlcmd);
+                
                 //try to logout current user
-                sqlcmd = "update users set isLoggedIn=0 where username='" + txtboxUsername.Text + "'";
+                string sqlcmd = "update users set isLoggedIn=0 where id='" + Const.userInfo[0] + "'";
                 conn.AddRemoveAlter(sqlcmd);
-                conn.Close();
+                //store new user info 
+                Const.userInfo[0] = Const.userInfo[1] = reader.GetString(0);
+                // update login status for new user
+                sqlcmd = "update users set isLoggedIn=1 where id='" + Const.userInfo[0] + "'";
+                conn.AddRemoveAlter(sqlcmd);
+                
                 //
                 MessageBox.Show("Đăng nhập thành công");
                 txtboxUsername.Text = txtboxID.Text;
                 txtboxID.Text = "";
                 txtboxPassword.Text = "";
-                txtboxRivalIP.Enabled = true;
-                btCreateRoom.Enabled = true;
-                btEnterRoom.Enabled = true;
-
+                //txtboxRivalIP.Enabled = true;
+                //btCreateRoom.Enabled = true;
+                //btEnterRoom.Enabled = true;
+                btFindMatch.Enabled = true;
+                conn.Close();
 
                 Const.username = txtboxUsername.Text;
                 Const.serverIP = txtboxDatabaseIP.Text;
@@ -271,40 +242,53 @@ namespace uit_war
         //login by facebook
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            Process.Start("https://www.facebook.com/dialog/oauth?client_id=2017210028392743&redirect_uri=https://lephamhuycuong.000webhostapp.com/callback.php&scope=public_profile&state=" + txtboxMyIP.Text);
-            Thread thread = new Thread(()=> {
+            Process.Start("https://www.facebook.com/dialog/oauth?client_id=2017210028392743&redirect_uri=https://lephamhuycuong.000webhostapp.com/callback.php&scope=public_profile&state=" + Const.myIP);
+            Thread thread = new Thread(() =>
+            {
                 RequestUntilHaveURL();
                 DeteleUsedURL();
                 Const.access_token = GetToken(Const.requestURL);
-                ShowUsernameAfterFBLogin();
-                EnableAllButton();
-                txtboxMyIP.Enabled = true;
-                txtboxRivalIP.Enabled = true;
+                GetUserInfo(Const.access_token);
+                LoginByFBId(Const.userInfo);
             });
             thread.IsBackground = true;
             thread.Start();
+        }
+        private void LoginByFBId(string[] userInfo)
+        {
+            //try to insert new id
+            SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
+            string sql = string.Format("insert into users values(N'{0}',N'{1}',N'{2}',{3},{4},'{5}',{6})", userInfo[0], userInfo[1], "1", "0", "0", Const.IP, "0");
+            connection.AddRemoveAlter(sql);
+            connection.Close();
+            //login
+            connection = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
+            sql = string.Format("select name from users where id='{0}' and password='1' and isLoggedIn=0", Const.userInfo[0]);
+            SqlDataReader reader = connection.Query(sql);
+            if (reader.HasRows)
+            {
+                reader.Read();
+                txtboxUsername.Text = reader.GetString(0);//show name
+                //create new connection to update user status
+                SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
+                sql = string.Format("update users set isLoggedIn=1 where id='{0}'", Const.userInfo[0]);
+                conn.AddRemoveAlter(sql);
+                conn.Close();
+                btFindMatch.Enabled = true;
+            }
+            else
+                MessageBox.Show("Tài khoản đang được đăng nhập ở nơi khác !!!");
+            connection.Close();
         }
         private void DeteleUsedURL()
         {
             HttpRequest httpClient = new HttpRequest();
             string url = "http://lephamhuycuong.000webhostapp.com/api.php/deleteURL";
-            string data = "{\"ip\":\"" + txtboxMyIP.Text + "\"}";
+            string data = "{\"ip\":\"" + Const.myIP + "\"}";
             string content_type = "application/json";
             httpClient.Post(url, data, content_type);
         }
-        private void ShowUsernameAfterFBLogin()
-        {
-            try
-            {
-                string[] userinfo = GetUserInfo(Const.access_token);
-                txtboxUsername.Text = userinfo[1];
-            }
-            catch ( Exception)
-            {
-                Thread.Sleep(500);
-                ShowUsernameAfterFBLogin();
-            }
-        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -313,15 +297,22 @@ namespace uit_war
         /// arr[0]=user_id
         /// arr[1]=username
         /// </returns>
-        private string[] GetUserInfo(string access_token)
+        private void GetUserInfo(string access_token)
         {
-            HttpRequest httpClient = new HttpRequest();
-            string result = httpClient.Get("https://graph.facebook.com/me?access_token="+access_token, null).ToString();
-            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
-            string[] userinfo = new string[2];
-            userinfo[0] = data["id"];
-            userinfo[1] = data["name"];
-            return userinfo;
+            try
+            {
+                HttpRequest httpClient = new HttpRequest();
+                string result = httpClient.Get("https://graph.facebook.com/me?access_token=" + access_token, null).ToString();
+                Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+
+                Const.userInfo[0] = data["id"];
+                Const.userInfo[1] = data["name"];
+            }
+            catch
+            {
+                Thread.Sleep(100);
+                GetUserInfo(access_token);
+            }
         }
         private string GetToken(string requestURL)
         {
@@ -337,16 +328,91 @@ namespace uit_war
                 HttpRequest httpClient = new HttpRequest();
                 string result = httpClient.Get("http://lephamhuycuong.000webhostapp.com/api.php/requestURL", null).ToString();
                 Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
-                Const.requestURL= data[txtboxMyIP.Text];
-                EnableAllButton();
-                txtboxMyIP.Enabled = true;
-                txtboxRivalIP.Enabled = true;
+                Const.requestURL = data[Const.myIP];
+                //EnableAllButton();
+                btFindMatch.Enabled = true;
+                
             }
             catch (Exception)
             {
                 Thread.Sleep(2000);
                 RequestUntilHaveURL();
             }
+        }
+
+        private void txtboxDatabaseIP_TextChanged(object sender, EventArgs e)
+        {
+            Const.serverIP = txtboxDatabaseIP.Text;
+        }
+
+        private void btFindMatch_Click(object sender, EventArgs e)
+        {
+            //update ip, isFindingMatch in database
+            SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
+            string sql = string.Format("update users set currentIP='{0}',isFindingMatch=1 where id='{1}'", Const.IP, Const.userInfo[0]);
+            conn.AddRemoveAlter(sql);
+
+            //search available room in database --> connect
+            sql = string.Format("select top 1 currentIP from users where isFindingMatch=1 and id!='{0}'",Const.userInfo[0]);
+            SqlDataReader reader= conn.Query(sql);
+            if(reader.HasRows)//connect
+            {
+                reader.Read();
+                string rivalIP = reader.GetString(0);
+                try
+                {
+                    SocketManager.ConnectServer(rivalIP, 9999);
+                    Program.socket.isServer = false;
+                    Program.main = new MainGameForm();
+                    Program.main.Text = "client";
+                    Program.login.Hide();
+                    Program.main.Show();
+
+                    Const.currentTeam = false;//right team
+                    ////set isFindingMatch to false
+                    //sql = string.Format("update users set isFindingMatch=0 where id='{0}'",Const.userInfo[0]);
+                    //conn.AddRemoveAlter(sql);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Trận đấu chưa được tạo !!!");
+                }
+            }
+            else// create server and wait if db has no available room
+            {
+                ////////////////
+
+                Const.username = txtboxUsername.Text;
+
+                try
+                {
+                    Program.socket.isServer = true;
+                    Program.socket.CreateServer();
+                    ///
+                    Program.main = new MainGameForm();
+                    Program.main.Text = "server";
+                    Program.login.Hide();
+                    Program.main.Show();
+
+                    Const.currentTeam = true;//left team 
+                }
+                catch
+                {
+                    Program.socket = null;
+                    Program.socket = new SocketManager();
+                    Program.socket.isServer = true;
+                    Program.socket.CreateServer();
+                    ///
+                    Program.main = new MainGameForm();
+                    Program.main.Text = "server";
+                    Program.login.Hide();
+                    Program.main.Show();
+
+                    Const.currentTeam = true;//left team
+                }
+            }
+            conn.Close();
+            
         }
     }
 

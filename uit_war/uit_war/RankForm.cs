@@ -40,7 +40,7 @@ namespace uit_war
         private void LoadDataToTable(string databaseIP)
         {
             //Chuan bi cau lenh query viet bang SQL
-            String sqlQuery = "select top 5 username,won_matchs from users order by won_matchs desc";
+            String sqlQuery = "select top 5 name,won_matchs from users order by won_matchs desc";
             SQLConnection connection = new SQLConnection(SQLConnection.GetDatabasePath(databaseIP+",6969","doan","admin","cuong123"));
             SqlDataReader reader = connection.Query(sqlQuery);
             lbTitle.Font= new Font("Arial", 22);

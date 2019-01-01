@@ -31,10 +31,10 @@ namespace uit_war
             //no care
             Control.CheckForIllegalCrossThreadCalls = false;
             availableMoney = 0;
-           
+
 
             InitProperties();
-                InitRender();
+            InitRender();
 
             Listen();
 
@@ -292,6 +292,11 @@ namespace uit_war
                         picboxChatHead.Show();
                         timer1.Start();
                         timer_increase_money.Start();
+                        //update isFindingMatch of server to false
+                        SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
+                        string sql = string.Format("update users set isFindingMatch=0 where id='{0}'", Const.userInfo[0]);
+                        conn.AddRemoveAlter(sql);
+                        conn.Close();
                     }));
                     break;
                 case (int)SocketCommand.NOTIFY:
@@ -364,9 +369,9 @@ namespace uit_war
                     break;
                 case (int)SocketCommand.SEND_MESSAGE:
                     //show message of rival
-                    richTextBox1.AppendText("\n\n" + data.Message+"\n\n");
+                    richTextBox1.AppendText("\n\n" + data.Message + "\n\n");
                     int startIndex = richTextBox1.GetFirstCharIndexFromLine(richTextBox1.Lines.Length - 3);
-                    int lastIndex = richTextBox1.TextLength-2;
+                    int lastIndex = richTextBox1.TextLength - 2;
                     richTextBox1.Select(startIndex, lastIndex);
                     richTextBox1.SelectionAlignment = HorizontalAlignment.Left;
                     richTextBox1.SelectionBackColor = Color.LightGray;
@@ -393,7 +398,7 @@ namespace uit_war
                 //check win/lose
                 for (int i = 0; i < Const.listTrops.Count; i++)
                 {
-                    
+
                     //process win/lose
                     //trop outside screen
                     //and trop is my team
@@ -407,7 +412,7 @@ namespace uit_war
                         Program.socket.Send(new SocketData((int)SocketCommand.END_GAME, currentItem, Point.Empty));
                         //update won_matchs in database
                         SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
-                        string sql = "update users set won_matchs+=1 where username='" + Const.username + "'";
+                        string sql = "update users set won_matchs+=1 where id='" + Const.userInfo[0] + "'";
                         conn.AddRemoveAlter(sql);
                         conn.Close();
                         MessageBox.Show("You win");
@@ -544,6 +549,12 @@ namespace uit_war
             //send start signal to server
             if (!Program.socket.isServer)
             {
+                //update isFinding match to false
+                SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
+                string sql=string.Format("update users set isFindingMatch=0 where id='{0}'",Const.userInfo[0]);
+                conn.AddRemoveAlter(sql);
+                conn.Close();
+                //
                 Program.socket.Send(new SocketData((int)SocketCommand.START_GAME, currentItem, Point.Empty));
                 timer1.Start();
                 timer_increase_money.Start();
@@ -662,11 +673,12 @@ namespace uit_war
                 }
                 catch { }
                 //return homepage
-                //SocketManager.CloseConnection();
                 Program.login.Show();
-
-                //this.Text = "thoat";
-                //MessageBox.Show("thoat");
+                //update is finding match to false if user cancel finding match
+                SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
+                string sql = string.Format("update users set isFindingMatch=0 where id='{0}'",Const.userInfo[0]);
+                conn.AddRemoveAlter(sql);
+                conn.Close();
             }
         }
 
@@ -743,15 +755,15 @@ namespace uit_war
             //hide chat box
             else
             {
-                picboxChatHead.Location = new Point(0, this.ClientSize.Height-picboxChatHead.Height);
+                picboxChatHead.Location = new Point(0, this.ClientSize.Height - picboxChatHead.Height);
                 panel1.Hide();
             }
-               
+
         }
 
         private void txtboxChat_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode== Keys.Enter && txtboxChat.Text != "")
+            if (e.KeyCode == Keys.Enter && txtboxChat.Text != "")
                 SendMessage();
         }
     }

@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 
 namespace uit_war
 {
@@ -32,15 +33,16 @@ namespace uit_war
             Control.CheckForIllegalCrossThreadCalls = false;
             availableMoney = 0;
 
-
-            InitProperties();
             InitRender();
+            InitProperties();
+            
 
             Listen();
 
         }
         private void InitRender()
         {
+            
             Const.graphics = this.CreateGraphics();
             // Tạo back buffer
             Const.backBuffer = new Bitmap(this.ClientSize.Width,
@@ -106,16 +108,27 @@ namespace uit_war
             Const.spriteMoney10 = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\spriteMoney10.png"));
             Const.spriteAvailableMoney = Const.spriteMoney0;
             Const.spriteHealingSpell = new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\spriteHeal.png"));
+
+            Const.spriteBoom= new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\giantboom.png"));
+            Const.spriteBoomExloding= new Bitmap(Image.FromFile(Application.StartupPath + "\\Resources\\exploding_effect.png"));
         }
         private void InitProperties()
         {
 
-
+            Const.listBooms = new List<Boom>();
+            Const.listBooms.Clear();
             Const.listSpells = new List<Spell>();
             Const.listSpells.Clear();
             Const.listTrops = new List<Trop>();
             Const.listTrops.Clear();
             Const.spriteAvailableMoney = Const.spriteMoney0;
+            //create 6 booms
+            Const.listBooms.Add(new Boom(Const.currentTeam, new Point(0, 111+25)));
+            Const.listBooms.Add(new Boom(Const.currentTeam, new Point(0, 275+ 25)));
+            Const.listBooms.Add(new Boom(Const.currentTeam, new Point(0, 444+ 25)));
+            Const.listBooms.Add(new Boom(!Const.currentTeam, new Point(this.ClientSize.Width-110, 111+ 25)));
+            Const.listBooms.Add(new Boom(!Const.currentTeam, new Point(this.ClientSize.Width-110, 275+ 25)));
+            Const.listBooms.Add(new Boom(!Const.currentTeam, new Point(this.ClientSize.Width-110, 444+ 25)));
         }
         private void UpdateMoney()
         {
@@ -233,16 +246,15 @@ namespace uit_war
 
         private void exit_Click(object sender, EventArgs e)
         {
-            if (panel1.IsDisposed)
-                MessageBox.Show("show");
-            else
-                MessageBox.Show("hideing");
+            SoundPlayer.ChangePlay(Application.StartupPath + "\\Resources\\hit.mp3");
+            SoundPlayer.Play();
         }
 
-
-        void ListenUntilReceivedData()
+        Thread listenThread;
+         void ListenUntilReceivedData()
         {
-            Thread listenThread = new Thread(() =>
+
+            listenThread = new Thread(() =>
             {
                 try
                 {
@@ -256,7 +268,12 @@ namespace uit_war
                 }
             });
             listenThread.IsBackground = true;
-            listenThread.Start();
+            try
+            {
+                listenThread.Start();
+            }
+            catch { }
+            
         }
         void Listen()
         {
@@ -292,6 +309,7 @@ namespace uit_war
                         picboxChatHead.Show();
                         timer1.Start();
                         timer_increase_money.Start();
+                        timerFindMatch.Stop();
                         //update isFindingMatch of server to false
                         SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
                         string sql = string.Format("update users set isFindingMatch=0 where id='{0}'", Const.userInfo[0]);
@@ -493,11 +511,26 @@ namespace uit_war
                             Const.listSpells[j].AffectedTrops.Add(i);
 
                         }
+                //check trops in range of boom
+                for (int i = 0; i < Const.listTrops.Count; i++)
+                    for (int j = 0; j < Const.listBooms.Count; j++)
+                        // trops in affect range of boom
+                        if (Const.listBooms[j].CurrentLocation.X + Const.listBooms[j].Sprite.Width / 3 >= Const.listTrops[i].CurrentLocation.X
+                            && Const.listBooms[j].CurrentLocation.X <= Const.listTrops[i].CurrentLocation.X + Const.listTrops[i].Sprite.Width / 3
+                            && Const.listBooms[j].CurrentLocation.Y <= Const.listTrops[i].CurrentLocation.Y + Const.listTrops[i].Sprite.Height / 4
+                            && Const.listBooms[j].CurrentLocation.Y + Const.listBooms[j].Sprite.Height / 4 >= Const.listTrops[i].CurrentLocation.Y)
+                        {
+                            //add
+                            Const.listBooms[j].AffectedTrops.Add(i);
+
+                        }
                 //make spell affect on trops
                 for (int i = 0; i < Const.listSpells.Count; i++)
                     Const.listSpells[i].Drop();
+                //make boom explode
+                for (int i = 0; i < Const.listBooms.Count; i++)
+                    Const.listBooms[i].Explode();
                 //set trops running or attacking base on its status
-                //check trop move outside screen --> process win/lose
                 for (int i = 0; i < Const.listTrops.Count; i++)
                 {
 
@@ -551,7 +584,7 @@ namespace uit_war
             {
                 //update isFinding match to false
                 SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
-                string sql=string.Format("update users set isFindingMatch=0 where id='{0}'",Const.userInfo[0]);
+                string sql = string.Format("update users set isFindingMatch=0 where id='{0}'", Const.userInfo[0]);
                 conn.AddRemoveAlter(sql);
                 conn.Close();
                 //
@@ -569,9 +602,36 @@ namespace uit_war
                 btHulk.Hide();
                 panel1.Hide();
                 picboxChatHead.Hide();
+                Const.startTime = DateTime.Now.TimeOfDay;
                 ListenUntilReceivedData();
+                timerFindMatch = new Timer();
+                timerFindMatch.Tick += TimerFindMatch_Tick;
+                timerFindMatch.Start();
+
             }
         }
+        // cancel find match after 20s not found
+        Timer timerFindMatch;
+        bool isCalledListenUntilReceivedData = false;
+        private void TimerFindMatch_Tick(object sender, EventArgs e)
+        {
+            //call ListenUntilReceivedData() if not called yet
+            //if (!isCalledListenUntilReceivedData)
+            //{
+            //    ListenUntilReceivedData();
+            //    isCalledListenUntilReceivedData = true;
+            //}
+            if ((DateTime.Now.TimeOfDay - Const.startTime).Seconds > 20)
+            {
+                timerFindMatch.Stop();
+                listenThread.Abort();
+                MessageBox.Show("Không tìm thấy trận");
+                
+                this.Close();
+            }
+            
+        }
+
         private void UpdateButtonEffect()
         {
             if (availableMoney >= 7)
@@ -602,12 +662,20 @@ namespace uit_war
             }
             UpdateMoney();
             UpdateButtonEffect();
-            //remove spell after 6s
+            //remove spell when out of affect time
             for (int i = 0; i < Const.listSpells.Count; i++)
                 if (Const.listSpells[i].AvailableTime < 0)
                     Const.listSpells.RemoveAt(i);
             for (int i = 0; i < Const.listSpells.Count; i++)
                 Const.listSpells[i].AvailableTime -= 2;
+            //remove booms exploded
+            for (int i = 0; i < Const.listBooms.Count; i++)
+            {
+                if (Const.listBooms[i].IsExploded)
+                {
+                    Const.listBooms.RemoveAt(i);
+                }
+            }
         }
         PictureBox pictureBox = new PictureBox();
         private void btHealingSpell_MouseHover(object sender, EventArgs e)
@@ -676,7 +744,7 @@ namespace uit_war
                 Program.login.Show();
                 //update is finding match to false if user cancel finding match
                 SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(Const.serverIP + ",6969", "doan", "admin", "cuong123"));
-                string sql = string.Format("update users set isFindingMatch=0 where id='{0}'",Const.userInfo[0]);
+                string sql = string.Format("update users set isFindingMatch=0 where id='{0}'", Const.userInfo[0]);
                 conn.AddRemoveAlter(sql);
                 conn.Close();
             }
@@ -695,8 +763,10 @@ namespace uit_war
 
         private void MainGameForm_Deactivate(object sender, EventArgs e)
         {
+
             axWindowsMediaPlayer1.Ctlcontrols.stop();
             axWindowsMediaPlayer2.Ctlcontrols.stop();
+
         }
         int rows = 0;
         private void btSend_Click(object sender, EventArgs e)

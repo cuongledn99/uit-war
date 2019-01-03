@@ -25,3 +25,14 @@ D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Release\uit_war.csproj.CopyComplete
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Release\uit_war.exe
 D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Release\uit_war.pdb
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Release\Facebook.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Release\Newtonsoft.Json.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Release\xNet.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Release\Facebook.xml
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Release\Newtonsoft.Json.pdb
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Release\Newtonsoft.Json.xml
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Release\Interop.WMPLib.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\bin\Release\AxInterop.WMPLib.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Release\Interop.WMPLib.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Release\AxInterop.WMPLib.dll
+D:\kemulator\Windroy\uit\source code .net\git_clone\uit-war\uit_war\uit_war\obj\Release\uit_war.csproj.ResolveComReference.cache

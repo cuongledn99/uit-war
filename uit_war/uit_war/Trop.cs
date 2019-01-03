@@ -17,7 +17,7 @@ namespace uit_war
             CurrentStatus = false;
             BeingAttackedBy = new List<int>();
         }
-        public SoundPlayer Mcd = new SoundPlayer("Resources\\hit.wav");
+        //public SoundPlayer Mcd = new SoundPlayer("Resources\\hit.wav");
         private bool currentStatus;// false: running true: attacking
         protected int speed;
         private int damage;

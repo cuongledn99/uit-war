@@ -42,9 +42,9 @@ namespace uit_war
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.axWindowsMediaPlayer2 = new AxWMPLib.AxWindowsMediaPlayer();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.txtboxChat = new System.Windows.Forms.TextBox();
-            this.btSend = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.btSend = new System.Windows.Forms.Button();
+            this.txtboxChat = new System.Windows.Forms.TextBox();
             this.picboxChatHead = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer2)).BeginInit();
@@ -153,13 +153,14 @@ namespace uit_war
             this.panel1.Size = new System.Drawing.Size(235, 219);
             this.panel1.TabIndex = 13;
             // 
-            // txtboxChat
+            // richTextBox1
             // 
-            this.txtboxChat.Location = new System.Drawing.Point(3, 196);
-            this.txtboxChat.Name = "txtboxChat";
-            this.txtboxChat.Size = new System.Drawing.Size(169, 20);
-            this.txtboxChat.TabIndex = 0;
-            this.txtboxChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtboxChat_KeyDown);
+            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(232, 190);
+            this.richTextBox1.TabIndex = 15;
+            this.richTextBox1.Text = "";
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // btSend
             // 
@@ -171,14 +172,13 @@ namespace uit_war
             this.btSend.UseVisualStyleBackColor = true;
             this.btSend.Click += new System.EventHandler(this.btSend_Click);
             // 
-            // richTextBox1
+            // txtboxChat
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(232, 190);
-            this.richTextBox1.TabIndex = 15;
-            this.richTextBox1.Text = "";
-            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            this.txtboxChat.Location = new System.Drawing.Point(3, 196);
+            this.txtboxChat.Name = "txtboxChat";
+            this.txtboxChat.Size = new System.Drawing.Size(169, 20);
+            this.txtboxChat.TabIndex = 0;
+            this.txtboxChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtboxChat_KeyDown);
             // 
             // picboxChatHead
             // 
@@ -208,9 +208,10 @@ namespace uit_war
             this.Controls.Add(this.exit);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainGameForm";
-            this.Text = "Form1";
+            this.Text = "UIT WAR";
             this.Activated += new System.EventHandler(this.MainGameForm_Activated);
             this.Deactivate += new System.EventHandler(this.MainGameForm_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainGameForm_FormClosing);

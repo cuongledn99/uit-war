@@ -98,8 +98,6 @@ namespace uit_war
             Const.myIP = SocketManager.GetLocalIPv4_v2();
         }
 
-        
-
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             //logout current user
@@ -109,10 +107,6 @@ namespace uit_war
             conn.Close();
             Application.Exit();
         }
-
-        
-
-
         
         private void InitProperties()
         {
@@ -131,7 +125,7 @@ namespace uit_war
                 btFindMatch.Enabled = false;
                 InitProperties();
             }
-            SocketManager.CloseConnection();
+                SocketManager.CloseConnection();
         }
 
         private void btRank_Click(object sender, EventArgs e)
@@ -181,7 +175,7 @@ namespace uit_war
             if (reader.HasRows && reader.Read() && reader.GetInt32(1) == 0)
             {
                 SQLConnection conn = new SQLConnection(SQLConnection.GetDatabasePath(txtboxDatabaseIP.Text + ",6969", "doan", "admin", "cuong123"));
-                
+
                 //try to logout current user
                 string sqlcmd = "update users set isLoggedIn=0 where id='" + Const.userInfo[0] + "'";
                 conn.AddRemoveAlter(sqlcmd);
@@ -190,7 +184,7 @@ namespace uit_war
                 // update login status for new user
                 sqlcmd = "update users set isLoggedIn=1 where id='" + Const.userInfo[0] + "'";
                 conn.AddRemoveAlter(sqlcmd);
-                
+
                 //
                 MessageBox.Show("Đăng nhập thành công");
                 txtboxUsername.Text = txtboxID.Text;
@@ -215,9 +209,7 @@ namespace uit_war
 
             }
             connection.Close();
-
         }
-
         private void btShare_Click(object sender, EventArgs e)
         {
             using (var client = new WebClient())
@@ -236,7 +228,6 @@ namespace uit_war
                     System.Diagnostics.Process.Start("https://www.facebook.com/device");
                 }
             }
-
         }
 
         //login by facebook
@@ -364,7 +355,7 @@ namespace uit_war
                     SocketManager.ConnectServer(rivalIP, 9999);
                     Program.socket.isServer = false;
                     Program.main = new MainGameForm();
-                    Program.main.Text = "client";
+                   // Program.main.Text = "client";
                     Program.login.Hide();
                     Program.main.Show();
 
@@ -390,7 +381,7 @@ namespace uit_war
                     Program.socket.CreateServer();
                     ///
                     Program.main = new MainGameForm();
-                    Program.main.Text = "server";
+                    //Program.main.Text = "server";
                     Program.login.Hide();
                     Program.main.Show();
 
@@ -404,7 +395,7 @@ namespace uit_war
                     Program.socket.CreateServer();
                     ///
                     Program.main = new MainGameForm();
-                    Program.main.Text = "server";
+                   // Program.main.Text = "server";
                     Program.login.Hide();
                     Program.main.Show();
 

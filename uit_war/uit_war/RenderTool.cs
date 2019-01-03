@@ -24,6 +24,13 @@ namespace uit_war
             g.DrawImage(Image.FromFile(Application.StartupPath + "\\Resources\\background2.jpg"), 0, 0);
             //render money bar
             g.DrawImage(Const.spriteAvailableMoney, 78, 1);
+            //render list boom
+            for (int i = 0; i < Const.listBooms.Count; i++)
+                g.DrawImage(Const.listBooms[i].Sprite, Const.listBooms[i].CurrentLocation.X, Const.listBooms[i].CurrentLocation.Y,
+                    new Rectangle(Const.curFrameColumn * Const.imageWidth / Const.imageColumns,
+                Const.curFrameRow * Const.imageHeight / Const.imageRows, Const.imageWidth / Const.imageColumns, Const.imageHeight / Const.imageRows), GraphicsUnit.Pixel);
+
+
             ////render fire border
             g.DrawImage(Const.sprite_touch, 365, 0,
             new Rectangle(Const.curFrameColumn * Const.imageWidth / Const.imageColumns,

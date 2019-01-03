@@ -68,6 +68,8 @@ namespace uit_war
         public static Bitmap spriteMoney10;
         public static Bitmap spriteAvailableMoney;
         public static Bitmap spriteHealingSpell;
+        public static Bitmap spriteBoomExloding;
+        public static Bitmap spriteBoom;
         // Số thự tự của frame (16 frame ảnh)
         public static int index;
         // dòng hiện tại của frame
@@ -85,7 +87,9 @@ namespace uit_war
         //list trop
         public static List<Trop> listTrops;
         //list spell
-        public static List<Spell> listSpells; 
+        public static List<Spell> listSpells;
+        //list boom
+        public static List<Boom> listBooms;
         //current team
         // true:  left team
         // false: right team
@@ -96,6 +100,7 @@ namespace uit_war
         public static string requestURL = "";
         public static string[] userInfo=new string[2];// [0]= id   [1] = name
         public static string myIP;
+        public static TimeSpan startTime;
         //public static int index_fire;
         //// dòng hiện tại của frame
         //public static int curFrameColumn_fire;

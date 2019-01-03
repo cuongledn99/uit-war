@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace uit_war
 {
@@ -46,6 +47,7 @@ namespace uit_war
             AffectedTrops.Clear();
         }
     }
+    
     class Freze : Spell
     {
         public Freze(bool currentTeam)
@@ -55,6 +57,51 @@ namespace uit_war
         public override void Drop()
         {
             throw new NotImplementedException();
+        }
+    }
+    class Boom
+    {
+        private bool isExploded;
+        private bool currentTeam;// true: left team|| false: right team
+        private Point currentLocation;
+        private Bitmap sprite;
+        private int availableTime;
+        private List<int> affectedTrops;//store index of affected trops
+        public bool CurrentTeam { get => currentTeam; set => currentTeam = value; }
+        public Point CurrentLocation { get => currentLocation; set => currentLocation = value; }
+        public Bitmap Sprite { get => sprite; set => sprite = value; }
+        public List<int> AffectedTrops { get => affectedTrops; set => affectedTrops = value; }
+        public bool IsExploded { get => isExploded; set => isExploded = value; }
+        public Boom(bool currentTeam,Point currentLocation)
+        {
+            IsExploded = false;
+            Sprite = Const.spriteBoom;
+            //Sprite.MakeTransparent();
+            CurrentTeam = currentTeam;
+            CurrentLocation = currentLocation;
+            AffectedTrops = new List<int>();
+        }
+        public void Explode()
+        {
+            //exlode
+           
+            //Sprite.MakeTransparent();
+            //kill rival trops in range of boom
+            foreach (int index in AffectedTrops)
+            {
+                if (Const.listTrops[index].CurrentTeam != CurrentTeam)
+                {
+                    //Sprite = Const.spriteBoomExloding;
+                    Const.listTrops.RemoveAt(index);
+                    IsExploded = true;
+                }
+            }
+            if(isExploded)
+            {
+                SoundPlayer.ChangePlay(Application.StartupPath + "\\Resources\\explodesound.mp3");
+                SoundPlayer.Play();
+                Sprite = Const.spriteBoomExloding;
+            }
         }
     }
 }
